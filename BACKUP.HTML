@@ -1,0 +1,2512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>MAWAESU</title>
+<style>
+#loginOverlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: none; 
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.8);
+    z-index: 999999999;
+}
+</style>
+
+
+<style>
+
+.password-hint {
+  font-size: 0.8rem;
+  color: #444;
+  margin: 6px auto 12px;
+  max-width: 320px;
+  line-height: 1.4;
+}
+
+/* ================= BASE ================= */
+* {
+  box-sizing: border-box;
+}
+html, body {
+  width: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: #000;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* App wrapper */
+#appRoot {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Pages */
+.page {
+  display: none;
+  width: 100%;
+  max-width: 960px;
+
+  max-height: 90vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  padding: 40px 30px;
+  border-radius: 25px;
+
+  display: flex;
+  flex-direction: column;
+
+  animation: fadeIn 0.4s ease forwards;
+}
+
+/* ================= LOGIN PAGE ================= */
+#loginPage {
+  background: radial-gradient(circle at top, #4B0082, #000);
+  color: #FFD700;
+  text-align: center;
+}
+
+#loginPage input {
+  width: 100%;
+  max-width: 320px;
+  margin: 10px auto;
+  padding: 14px 16px;
+  border-radius: 14px;
+  border: none;
+  font-size: 1rem;
+}
+
+/* ================= SIGNUP PAGE ================= */
+#signupPage {
+  background: radial-gradient(circle at top, #e6d9ff, #cbb7f5);
+  color: #111;
+  text-align: center;
+}
+
+#signupPage h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+#signupPage .auth-sub {
+  color: #333;
+  margin-bottom: 20px;
+  font-size: 0.95rem;
+}
+
+/* Inputs */
+#signupPage input {
+  width: 100%;
+  max-width: 320px;
+  margin: 10px auto;
+  padding: 14px 16px;
+  border-radius: 14px;
+  border: 1px solid #b8a6e8;
+  font-size: 1rem;
+  background: #f9f6ff;
+  color: #111;
+}
+
+#signupPage input::placeholder {
+  color: #666;
+}
+
+/* Gold Button */
+#signupPage .primary-btn {
+  margin-top: 14px;
+  padding: 14px 24px;
+  border-radius: 999px;
+  border: none;
+  background: linear-gradient(135deg, #ffd700, #ffbf00);
+  color: #111;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 8px 22px rgba(255, 215, 0, 0.35);
+}
+
+#signupPage .primary-btn:hover {
+  background: linear-gradient(135deg, #ffcc00, #e6b800);
+}
+
+/* Switch text */
+#signupPage .auth-switch {
+  margin-top: 18px;
+  font-size: 0.9rem;
+  color: #222;
+}
+
+#signupPage .auth-switch span {
+  color: #6a0dad;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
+}
+/* ================= FORGOT PASSWORD PAGE ================= */
+#forgotPage {
+  background: radial-gradient(circle at top, #e6d9ff, #cbb7f5);
+  color: #111;
+  text-align: center;
+}
+
+#forgotPage h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+#forgotPage .auth-sub {
+  color: #333;
+  margin-bottom: 20px;
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+/* Inputs */
+#forgotPage input {
+  width: 100%;
+  max-width: 320px;
+  margin: 10px auto;
+  padding: 14px 16px;
+  border-radius: 14px;
+  border: 1px solid #b8a6e8;
+  font-size: 1rem;
+  background: #f9f6ff;
+  color: #111;
+}
+
+#forgotPage input::placeholder {
+  color: #666;
+}
+
+/* Gold Button */
+#forgotPage .primary-btn {
+  margin-top: 14px;
+  padding: 14px 24px;
+  border-radius: 999px;
+  border: none;
+  background: linear-gradient(135deg, #ffd700, #ffbf00);
+  color: #111;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 8px 22px rgba(255, 215, 0, 0.35);
+}
+
+#forgotPage .primary-btn:hover {
+  background: linear-gradient(135deg, #ffcc00, #e6b800);
+}
+
+/* Back to login */
+#forgotPage .auth-switch {
+  margin-top: 18px;
+  font-size: 0.9rem;
+  color: #222;
+}
+
+#forgotPage .auth-switch span {
+  color: #6a0dad;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+
+/* ================= OPENING PAGE ================= */
+#openingPage {
+  background: #4B0082;
+  color: #FFF;
+  text-align: center;
+}
+
+#openingPage h1 {
+  color: #FFD700;
+  margin-bottom: 30px;
+}
+
+/* ================= BUTTONS ================= */
+button {
+  cursor: pointer;
+  border: none;
+  border-radius: 20px;
+  padding: 15px 35px;
+  font-size: 1.1rem;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 18px rgba(255,215,0,0.35);
+}
+
+#startQuizBtn {
+  background: #FFD700;
+  color: #000;
+}
+
+#continueResultBtn,
+#continueIntroBtn,
+#continueColorBtn,
+#nextStepBtn,
+#roomAnalysisBtn {
+  background: #4B0082;
+  color: #FFD700;
+}
+
+/* ================= QUIZ PAGE ================= */
+#quizPage {
+  background: #000;
+  color: #FFD700;
+}
+
+#quizPage h1 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+#progressContainer {
+  background: #333;
+  border-radius: 20px;
+  height: 15px;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+#progressBar {
+  height: 100%;
+  width: 0%;
+  background: #FFD700;
+  transition: width 0.4s ease;
+}
+
+.question {
+  background: #111;
+  padding: 24px;
+  border-radius: 20px;
+  margin-bottom: 22px;
+}
+
+.question button {
+  width: 100%;
+  margin: 8px 0;
+  background: #000;
+  color: #FFD700;
+  border: 1px solid #FFD700;
+}
+
+/* ================= RESULT PAGE ================= */
+#resultPage {
+  background: #4B0082;
+  color: #FFD700;
+  text-align: center;
+}
+
+/* ================= INFO PAGES ================= */
+#introPage {
+  background: #0B1E4F;
+  color: #FFD700;
+}
+
+#colorPage {
+  background: #003366;
+  color: #FFD700;
+}
+
+#colorAnalysisPage {
+  background: #111;
+  color: #FFD700;
+}
+
+/* ================= ANALYSIS CARDS ================= */
+.analysisWrap {
+  max-width: 960px;
+  margin: auto;
+}
+
+.analysisCard {
+  background: #F5F1E3;
+  padding: 24px;
+  border-radius: 14px;
+  color: #333;
+}
+
+.analysisSub,
+.note {
+  text-align: center;
+  font-size: 14px;
+}
+
+/* ================= ROOM ANALYSIS ================= */
+.roomCard {
+  background: #F5F1E3;
+  border-radius: 12px;
+  padding: 18px;
+}
+
+/* ================= ANIMATION ================= */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ================= MOBILE ================= */
+@media (max-width: 520px) {
+  .page {
+    padding: 24px 18px;
+  }
+
+  button {
+    padding: 12px 20px;
+    font-size: 1rem;
+  }
+}
+
+.page {
+  display: none;
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow-y: auto;
+}
+
+</style>
+</head>
+<body>
+<div id="appRoot">
+
+<!-- Login Page -->
+<div id="loginPage" class="page auth-page">
+  <div class="auth-card">
+    <h1>Welcome Back</h1>
+    <p class="auth-sub">Log in to continue</p>
+
+    <input id="loginEmail" type="email" placeholder="Email" />
+    <input id="loginPassword" type="password" placeholder="Password" />
+
+    <button id="loginBtn" class="primary-btn">Log In</button>
+
+    <p class="auth-switch">
+      New here?
+      <span onclick="showPage('signupPage')">Create an account</span>
+    </p>
+    <p class="auth-switch">
+  <span onclick="showPage('forgotPage')">Forgot password?</span>
+</p>
+  </div>
+</div>
+
+<!-- Forgot Password Page -->
+<div id="forgotPage" class="page auth-page">
+  <div class="auth-card">
+    <h1>Reset Password</h1>
+    <p class="auth-sub">
+      Enter your registered email. We’ll send you a password reset link.
+    </p>
+
+    <input
+      id="forgotEmail"
+      type="email"
+      placeholder="Registered email"
+      required
+    />
+
+    <button id="resetBtn" class="primary-btn">
+      Send Reset Email
+    </button>
+
+    <p class="auth-switch">
+      <span onclick="showPage('loginPage')">← Back to Login</span>
+    </p>
+  </div>
+</div>
+
+
+<!-- SignUp Page -->
+<div id="signupPage" class="page auth-page">
+  <div class="auth-card">
+    <h1>Create Account</h1>
+    <p class="auth-sub">Start your journey</p>
+
+    <input
+      id="signupName"
+      type="text"
+      placeholder="Full name"
+      required
+    />
+
+    <input
+      id="signupEmail"
+      type="email"
+      placeholder="Email address"
+      required
+    />
+
+    <input
+      id="signupPassword"
+      type="password"
+      placeholder="Create a strong password"
+      required
+    />
+
+    <!-- Password rules hint -->
+    <p class="password-hint">
+      Must be at least 8 characters and include uppercase, lowercase, number, and special character.
+    </p>
+
+    <button id="signupBtn" class="primary-btn">
+      Sign Up
+    </button>
+
+    <p class="auth-switch">
+      Already have an account?
+      <span onclick="showPage('loginPage')">Log in</span>
+    </p>
+  </div>
+</div>
+
+
+<!-- Opening Page -->
+<div id="openingPage" class="page">
+  <h1>To know you, take this test.</h1>
+<button id="startQuizBtn" onclick="showPage('quizPage')">TEST NOW</button>
+</div>
+
+<!-- Quiz Page -->
+<div id="quizPage" class="page">
+  <h1>Archetype Quiz</h1>
+  <div id="progressContainer"><div id="progressBar"></div></div>
+  <div id="quiz"></div>
+</div>
+
+<!-- Result Page -->
+<div id="resultPage" class="page">
+  <h2 id="archetypeName"></h2>
+  <p id="archetypeDesc"></p>
+  <button id="continueResultBtn" onclick="showPage('introPage')">CONTINUE</button>
+</div>
+
+<!-- Introduction Page -->
+<div id="introPage" class="page">
+  <h1>Hello, I’m CSAP! 🌟</h1>
+  <p>
+  I’m on a personal and purposeful journey to help people know themselves, become their truest selves, and stay grounded in who they are. Life can be complex, confusing, and full of expectations—sometimes we lose sight of who we really are. My goal is to create a space where you can pause, reflect, and explore yourself with curiosity and compassion.
+  </p>
+  <p>
+  Here, you’ll find insights, exercises, and analyses designed to help you understand your patterns, preferences, strengths, and challenges. These insights are gathered from freely available information across books, studies, personality frameworks, and other resources. While I put care and thought into presenting this information, this is a survey-type exploration and not professional advice. Think of it as a reflective guide—a map to help you navigate your own journey, rather than a prescription or therapy.
+  </p>
+  <p>
+  This journey is about self-discovery in its purest form. It’s about noticing what makes you light up, what pulls you down, and what makes you uniquely you. It’s about creating awareness, building self-trust, and celebrating your authenticity.
+  </p>
+  <p>
+  So whether you’re here to understand your personality, explore your habits, or simply reflect on your inner world, know that this is a safe, judgment-free space to grow and connect with yourself. Together, let’s step into the adventure of being fully, unapologetically ourselves. ✨
+  </p>
+  <button id="continueIntroBtn" onclick="showPage('colorPage')">CONTINUE</button>
+</div>
+
+<!-- Color Science Page -->
+<div id="colorPage" class="page">
+  <h1>The Science of Color and Its Effect on Life</h1>
+  <p>
+  How We Perceive Color<br><br>
+  Colors are wavelengths of light, and our eyes perceive them through specialized cells called cones in the retina. Humans typically have three types of cones, sensitive to red, green, and blue.<br><br>
+  Our brain interprets the combination of signals from these cones to create the colors we see. This means that even the same color can appear subtly different to different people depending on factors like genetics, mood, and environment.<br><br>
+  Physiological Responses<br><br>
+  Colors can influence the nervous system, triggering responses like increased heart rate, relaxation, or alertness.<br>
+  Red: Can increase heart rate, boost energy, and evoke passion or urgency.<br>
+  Blue: Often slows heart rate, promotes calm, focus, and trust.<br>
+  Yellow: Stimulates mental activity, creativity, and optimism.<br>
+  Green: Soothes the nervous system, linked to growth and harmony.<br><br>
+  Scientific studies show that exposure to colors affects hormones and brain waves, which directly influence mood, productivity, and even appetite.<br><br>
+  Psychological and Emotional Effects<br><br>
+  Color psychology explains that colors carry emotional weight and can trigger memories, cultural associations, and subconscious responses.<br>
+  For example, a room painted warm orange may evoke comfort or social warmth, while gray tones can lead to introspection or melancholy.<br>
+  Importantly, the same color can evoke different feelings in different people based on personal experiences and cultural background.<br><br>
+  Colors as Representations of Personality and Identity<br><br>
+  Individual Preferences and Perceptions<br>
+  People naturally gravitate toward colors that reflect their inner states or desired emotional outcomes.<br>
+  This is why personality assessments often use colors to represent traits: boldness, sensitivity, optimism, or leadership.<br><br>
+  Cultural and Personal Meaning<br>
+  Colors carry meanings beyond biology. Personal memories can attach emotional weight to colors.<br>
+  This means color’s impact is deeply subjective, shaping each person’s thoughts, behaviors, and feelings differently.<br><br>
+  How Color Shapes Us<br>
+  Mood and Behavior: Color can influence decision-making, creativity, and social interaction.<br>
+  Self-Expression and Identity: Colors are a form of non-verbal communication.<br>
+  Therapeutic and Healing Applications: Color therapy, or chromotherapy, uses specific wavelengths of light to target emotional and physical well-being.<br><br>
+  Key Insight: Each Of Us Sees And Feels Colors Differently<br>
+  Even though we share biology, our personal experiences, moods, and cultural lenses make color perception unique.<br>
+  Takeaway: Colors are more than aesthetic—they are a subtle force shaping our mental states, personalities, and life experiences.
+  </p>
+  <button id="continueColorBtn" onclick="showPage('colorAnalysisPage')">CONTINUE</button>
+</div>
+
+<!-- Colour Analysis Page -->
+<div id="colorAnalysisPage" class="page">
+  <div class="analysisWrap">
+    <div class="analysisCard" id="analysisCard">
+      <h1>Colour Analysis</h1>
+      <div class="analysisSub">A tailored palette and notes for your archetype — core colours first, then helping colours.</div>
+      <div id="contentArea"></div>
+      <div class="note">If nothing appears, make sure your quiz saved <code>localStorage.setItem('archetypeResult', '🌫️ The Silent Ache')</code> or <code>localStorage.setItem('archetypeScore', '7')</code>.</div>
+    </div>
+    <button id="nextStepBtn" onclick="showPage('roomIntroPage')" style="margin-top:30px;">
+  NEXT STEP
+</button>
+  </div>
+</div>
+
+<!-- Room Introduction Page -->
+<div id="roomIntroPage" class="page" style="background:#4B0082; color:#FFD700;">
+  <h1>🧠 The Psychological Connection Between Mind and Space</h1>
+  <p>The mind and the space we live in are deeply intertwined — every wall color, texture, sound, and light source shapes our emotions, thoughts, and even how we regulate energy. Psychologically, this relationship is known as environmental cognition — the process by which our surroundings influence how we feel, think, and behave. In simpler terms, our spaces quietly teach our minds how to exist.</p>
+  <h2>🧍‍♀️ The Body’s Search for Safety</h2>
+  <p>When a person enters a room, their brain immediately begins to scan for safety. This happens subconsciously through sensory processing. Warm light, natural materials, and organized layouts signal comfort and predictability, activating the parasympathetic nervous system, which slows the heart rate and allows calm, creative thought. In contrast, harsh lighting, clutter, or sharp contrasts can trigger low-grade stress, activating the sympathetic nervous system — the body’s alert mode. Over time, these environmental signals accumulate, shaping mood patterns and stress responses.</p>
+  <h2>🎨 The Emotional Language of Color, Light, and Texture</h2>
+  <p>Color, light, and texture all carry emotional “frequencies.” Soft matte finishes and muted tones reduce overstimulation by giving the eyes rest, helping the brain lower cortisol levels. Warm colors like amber or terracotta ignite motivation and comfort, while cool hues like sage or blue enhance reflection and tranquility. Even flooring textures matter: soft rugs or wooden floors provide tactile grounding, reminding the body that it is supported — a subtle, physical reassurance that aids mental stability.</p>
+  <h2>🪞 Space as a Mirror of Emotion and Identity</h2>
+  <p>Psychologically, space also mirrors identity and emotional state. Cluttered or dark rooms can amplify inner chaos or exhaustion, while minimalist, organized spaces promote mental clarity and self-control. This is not about luxury — even small sensory details, like how light falls on a desk or how air circulates through a window, can shift the nervous system from tension to ease. The mind seeks coherence — when the external environment aligns with internal emotion, we feel safe; when it doesn’t, anxiety or restlessness grows.</p>
+  <h2>🌿 Spaces as Nonverbal Healers</h2>
+  <p>Spaces also function as nonverbal therapists — holding, reflecting, and sometimes healing their inhabitants. A soft, enclosed space can calm someone struggling with overstimulation, while an open, airy layout can help those feeling trapped or confined. Over time, these spatial patterns become emotional conditioning: the brain associates the environment with specific moods. In neuroscience, this is called context-dependent memory — our minds recall emotions linked to physical settings.</p>
+  <h2>☀️ The Healing Power of Harmony</h2>
+  <p>Ultimately, the spaces we live in are not passive backgrounds — they are living extensions of the psyche. A well-designed room doesn’t just look good; it quietly regulates our stress, strengthens focus, and nurtures emotional recovery. The mind builds itself around what it sees daily — so when a space feels balanced, intentional, and gentle, the mind begins to mirror that balance, creating a quiet harmony between the inner and outer worlds.</p>
+  <button id="roomAnalysisBtn" onclick="showPage('roomAnalysisPage')" style="margin-top:20px;">
+  ROOM ANALYSIS
+</button>
+
+</div>
+
+<!-- Room Analysis Page -->
+<div id="roomAnalysisPage" class="page">
+  <div class="analysisWrap">
+    <div class="analysisCard" id="roomAnalysisCard">
+      <h1>Room Analysis</h1>
+      <div class="analysisSub">Detailed room design cards based on your archetype — Ideal Room Design and a Quick Summary.</div>
+      <div id="roomContentArea"></div>
+       <button onclick="exitApp()">EXIT</button>
+      <div class="note">If nothing appears, make sure your quiz saved <code>localStorage.setItem('archetypeResult', '🌫️ The Silent Ache')</code> or <code>localStorage.setItem('archetypeScore', '7')</code>.</div>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
+  import {
+    getAuth,
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    sendPasswordResetEmail
+  } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyA6pnGyG_S5WLz5JNW4hDcgAVto6YtdRWo",
+    authDomain: "mawaesu-toknowyou.firebaseapp.com",
+    projectId: "mawaesu-toknowyou"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+
+  // expose correctly
+  window.firebaseAuth = auth;
+  window.firebaseFns = {
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    sendPasswordResetEmail
+  };
+</script>
+
+
+<script defer>
+// ------------------ Archetypes (unchanged) ------------------
+const archetypes = [
+{low:0, high:5, name:"🌫️ The Silent Ache", desc:"Core Emotion: Emptiness\nHelpful Emotion: Tenderness\nEmotion Pulling You Back: Despair\nMantra: 'Even a flicker counts.'"},
+{low:6, high:10, name:"🌙 The Wounded Dreamer", desc:"Core Emotion: Longing\nHelpful Emotion: Imagination\nEmotion Pulling You Back: Resignation\nMantra: 'My longing is a compass.'"},
+{low:11, high:15, name:"🫧 The Fragile Survivor", desc:"Core Emotion: Fear\nHelpful Emotion: Awareness\nEmotion Pulling You Back: Hopelessness\nMantra: 'I am allowed to feel safe.'"},
+{low:16, high:20, name:"🌧️ The Quiet Keeper", desc:"Core Emotion: Grief\nHelpful Emotion: Sensitivity\nEmotion Pulling You Back: Isolation\nMantra: 'Grief is love with nowhere to go—so I’ll give it a place.'"},
+{low:21, high:25, name:"🧭 The Searching Soul", desc:"Core Emotion: Confusion\nHelpful Emotion: Curiosity\nEmotion Pulling You Back: Self-doubt\nMantra: 'Test, learn, iterate.'"},
+{low:26, high:30, name:"🌪️ The Restless Heart", desc:"Core Emotion: Restlessness\nHelpful Emotion: Desire\nEmotion Pulling You Back: Shame\nMantra: 'Desire is data.'"},
+{low:31, high:35, name:"🔥 The Hidden Flame", desc:"Core Emotion: Anger\nHelpful Emotion: Determination\nEmotion Pulling You Back: Frustration\nMantra: 'My anger guards what matters.'"},
+{low:36, high:40, name:"🌿 The Gentle Healer", desc:"Core Emotion: Compassion\nHelpful Emotion: Empathy\nEmotion Pulling You Back: Exhaustion\nMantra: 'I am a well, not a pipeline.'"},
+{low:41, high:45, name:"🏔️ The Resilient Wanderer", desc:"Core Emotion: Perseverance\nHelpful Emotion: Hope\nEmotion Pulling You Back: Weariness\nMantra: 'I can pause without quitting.'"},
+{low:46, high:50, name:"🫀 The Shattered Light", desc:"Core Emotion: Vulnerability\nHelpful Emotion: Authenticity\nEmotion Pulling You Back: Fear of rejection\nMantra: 'I don’t have to earn being real.'"},
+{low:51, high:55, name:"🌞 The Quiet Fighter", desc:"Core Emotion: Determination\nHelpful Emotion: Courage\nEmotion Pulling You Back: Doubt\nMantra: 'One brave inch at a time.'"},
+{low:56, high:60, name:"🌤️ The Gentle Dreamer", desc:"Core Emotion: Hope\nHelpful Emotion: Wonder\nEmotion Pulling You Back: Innocence\nMantra: 'Soft heart, strong spine.'"},
+{low:61, high:65, name:"🌈 The Radiant Spirit", desc:"Core Emotion: Joy\nHelpful Emotion: Gratitude\nEmotion Pulling You Back: Avoidance\nMantra: 'Joy is not a betrayal of pain.'"},
+{low:66, high:70, name:"🦁 The Brave Heart", desc:"Core Emotion: Courage\nHelpful Emotion: Strength\nEmotion Pulling You Back: Pride\nMantra: 'Strong enough to be helped.'"},
+{low:71, high:75, name:"🔥 The Inner Flame", desc:"Core Emotion: Passion\nHelpful Emotion: Creativity\nEmotion Pulling You Back: Obsession\nMantra: 'Tend the fire, don’t feed the frenzy.'"},
+{low:76, high:80, name:"🕯️ The Guiding Light", desc:"Core Emotion: Wisdom\nHelpful Emotion: Clarity\nEmotion Pulling You Back: Detachment\nMantra: 'Wisdom lives in a warm body.'"},
+{low:81, high:85, name:"🌠 The Boundless Dreamer", desc:"Core Emotion: Inspiration\nHelpful Emotion: Vision\nEmotion Pulling You Back: Restlessness\nMantra: 'Focus turns light into laser.'"},
+{low:86, high:90, name:"🎙️ The Brave Creator", desc:"Core Emotion: Authenticity\nHelpful Emotion: Expression\nEmotion Pulling You Back: Vulnerability hangover\nMantra: 'I am safe to be seen.'"},
+{low:91, high:95, name:"❤️‍🔥 The Compassionate Flame", desc:"Core Emotion: Love\nHelpful Emotion: Connection\nEmotion Pulling You Back: Over-giving\nMantra: 'My love includes me.'"},
+{low:96, high:100, name:"🌟 The Luminous Soul", desc:"Core Emotion: Wholeness\nHelpful Emotion: Peace\nEmotion Pulling You Back: Fragility\nMantra: 'Nothing missing. Nothing extra.'"}
+];
+
+// ------------------ Questions (full set as requested) ------------------
+const questions = [
+{q:"1. When you think about your childhood, what moment stays with you the most?",
+ options:["Someone you cared for","A quiet memory","A wild idea you had","A moment you planned"],
+ points:[3,0,1,2]},
+
+{q:"2. When you miss someone, what do you do first?",
+ options:["Reach out","Sit with the feeling","Imagine stories","Think it through"],
+ points:[3,0,1,2]},
+
+{q:"3. When you feel lost, what helps you find your way back?",
+ options:["People","Stillness","Creativity","Logic"],
+ points:[3,0,1,2]},
+
+{q:"4. What kind of day makes you feel safe?",
+ options:["A day spent caring","A slow quiet day","A playful day","A well-planned day"],
+ points:[3,0,1,2]},
+
+{q:"5. When someone hurts you, what do you focus on first?",
+ options:["Their feelings","Your thoughts","The meaning behind it","What to do next"],
+ points:[3,0,1,2]},
+
+{q:"6. What memory brings you the warmest feeling?",
+ options:["Helping someone","A silent moment","A bright idea","A win you earned"],
+ points:[3,0,1,2]},
+
+{q:"7. What makes you feel seen?",
+ options:["When someone understands your care","When someone listens quietly","When someone loves your ideas","When someone respects your plans"],
+ points:[3,0,1,2]},
+
+{q:"8. When the future scares you, what do you turn to?",
+ options:["Loved ones","Your inner world","Your imagination","Your structure"],
+ points:[3,0,1,2]},
+
+{q:"9. What kind of story feels closest to your heart?",
+ options:["Stories of kindness","Stories of quiet strength","Stories of dreamers","Stories of leaders"],
+ points:[3,0,1,2]},
+
+{q:"10. What do you try to protect the most?",
+ options:["People","Your peace","Your ideas","Your order"],
+ points:[3,0,1,2]},
+
+{q:"11. What do you wish others understood about you?",
+ options:["Your heart","Your silence","Your imagination","Your decisions"],
+ points:[3,0,1,2]},
+
+{q:"12. When you think of love, what comes to mind first?",
+ options:["Warmth","Calm","Wonder","Consistency"],
+ points:[3,0,1,2]},
+
+{q:"13. When someone cries in front of you, how do you react?",
+ options:["You comfort","You listen","You imagine their feelings","You steady them"],
+ points:[3,0,1,2]},
+
+{q:"14. What do you fear losing most?",
+ options:["Connection","Inner peace","Possibility","Control"],
+ points:[3,0,1,2]},
+
+{q:"15. When life changes suddenly, what helps you stay grounded?",
+ options:["People","Quiet moments","New ideas","Clear plans"],
+ points:[3,0,1,2]},
+
+{q:"16. When you feel proud of yourself, it’s usually because:",
+ options:["You helped someone","You understood something deeply","You dreamed something new","You finished something hard"],
+ points:[3,0,1,2]},
+
+{q:"17. When someone misunderstands you, how do you handle it?",
+ options:["With kindness","With space","With creativity","With strategy"],
+ points:[3,0,1,2]},
+
+{q:"18. When you learn something new, what excites you most?",
+ options:["Using it to help","Thinking about it alone","Creating with it","Organizing it"],
+ points:[3,0,1,2]},
+
+{q:"19. In a group, what role do you naturally fall into?",
+ options:["The supporter","The quiet observer","The idea maker","The planner"],
+ points:[3,0,1,2]},
+
+{q:"20. When you're by yourself, what do you drift toward?",
+ options:["Caring thoughts","Reflection","Daydreams","Tasks"],
+ points:[3,0,1,2]},
+
+{q:"21. What pushes you forward in life?",
+ options:["Love","Calm","Curiosity","Direction"],
+ points:[3,0,1,2]},
+
+{q:"22. When a problem appears, what is your first instinct?",
+ options:["Help","Think","Imagine","Plan"],
+ points:[3,0,1,2]},
+
+{q:"23. When you need to express yourself, how do you do it?",
+ options:["Through care","Through quiet thinking","Through creativity","Through decisions"],
+ points:[3,0,1,2]},
+
+{q:"24. Your natural way of being is:",
+ options:["Supportive","Reserved","Vision-filled","Organized"],
+ points:[3,0,1,2]},
+
+{q:"25. When the day ends, what makes you feel fulfilled?",
+ options:["Touching a life","Finding inner quiet","Creating something new","Finishing what you started"],
+ points:[3,0,1,2]}
+];
+
+
+// ------------------ Quiz Logic (unchanged) ------------------
+let currentQuestion = 0;
+let score = 0;
+
+const quizDiv = document.getElementById('quiz');
+const progressBar = document.getElementById('progressBar');
+
+function showQuestion() {
+  quizDiv.innerHTML = "";
+  if (currentQuestion >= questions.length) {
+    showResult();
+    return;
+  }
+  const qObj = questions[currentQuestion];
+  const questionElem = document.createElement('div');
+  questionElem.className = 'question';
+  questionElem.innerHTML = `<h3>${qObj.q}</h3>`;
+  qObj.options.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.innerText = opt;
+    btn.onclick = () => { score += qObj.points[i]; currentQuestion++; updateProgress(); showQuestion(); };
+    questionElem.appendChild(btn);
+  });
+  quizDiv.appendChild(questionElem);
+}
+
+function updateProgress() {
+  progressBar.style.width = `${(currentQuestion / questions.length) * 100}%`;
+}
+
+function showResult() {
+  // Determine archetype (UNCHANGED logic)
+  const archetype = archetypes.find(a => score >= a.low && score <= a.high);
+
+  if (archetype && archetype.name) {
+    localStorage.setItem("archetypeResult", archetype.name);
+    localStorage.setItem("archetypeScore", String(score));
+    document.getElementById('archetypeName').innerText = archetype.name;
+    document.getElementById('archetypeDesc').innerText = archetype.desc.replace(/\n/g, '\n');
+  } else {
+    document.getElementById('archetypeName').innerText = "No archetype";
+    document.getElementById('archetypeDesc').innerText = "No matching result.";
+  }
+
+  // ✅ ONE AND ONLY navigation call
+  showPage('resultPage');
+}
+
+// ------------------ SAFE BUTTON HANDLERS ------------------
+function bind(id, handler) {
+  const el = document.getElementById(id);
+  if (el) el.onclick = handler;
+}
+
+bind('startQuizBtn', () => {
+  showPage('quizPage');
+  showQuestion();
+});
+
+bind('continueResultBtn', () => {
+  showPage('introPage');
+});
+
+bind('continueIntroBtn', () => {
+  showPage('colorPage');
+});
+
+bind('continueColorBtn', () => {
+  showPage('colorAnalysisPage');
+  showColorAnalysis();
+});
+
+bind('nextStepBtn', () => {
+  showPage('roomIntroPage');
+});
+bind("signupBtn", async () => {
+  const email = signupEmail.value.trim();
+  const password = signupPassword.value;
+
+  if (!email || !password) {
+    alert("Email and password required");
+    return;
+  }
+
+  try {
+    await window.firebaseFns.createUserWithEmailAndPassword(
+      window.firebaseAuth,
+      email,
+      password
+    );
+    showPage("openingPage");
+  } catch (err) {
+    alert(err.message);
+  }
+});
+bind("loginBtn", async () => {
+  try {
+    await window.firebaseFns.signInWithEmailAndPassword(
+      window.firebaseAuth,
+      loginEmail.value,
+      loginPassword.value
+    );
+    showPage("openingPage");
+  } catch (err) {
+    alert(err.message);
+  }
+});
+bind("resetBtn", async () => {
+  try {
+    await window.firebaseFns.sendPasswordResetEmail(
+      window.firebaseAuth,
+      forgotEmail.value
+    );
+    alert("Password reset email sent");
+    showPage("loginPage");
+  } catch (err) {
+    alert(err.message);
+  }
+});
+
+// ------------------ PAGE NAVIGATION ------------------
+function showPage(pageId) {
+  document.querySelectorAll('.page').forEach(p => {
+    p.style.display = 'none';
+  });
+
+  const page = document.getElementById(pageId);
+  if (page) {
+    page.style.display = 'flex';
+    sessionStorage.setItem('currentPage', pageId);
+    page.scrollTop = 0;
+  }
+}
+
+// ------------------ Colour Analysis Logic (full: all 20 archetypes) ------------------
+function getContrastColor(hex) {
+  if (!hex) return "#000";
+  const h = hex.replace("#", "");
+  const r = parseInt(h.substr(0, 2), 16);
+  const g = parseInt(h.substr(2, 2), 16);
+  const b = parseInt(h.substr(4, 2), 16);
+  const yiq = (r * 299 + g * 587 + b * 114) / 1000;
+  return (yiq >= 128) ? "#000" : "#fff";
+}
+
+function swatchHTML(name, hex, note) {
+  const textC = getContrastColor(hex);
+  return `<div class="swatch" style="background:${hex}; color:${textC}">
+    <div>${name}</div>
+    <div class="hex">${hex}</div>
+    <div style="font-weight:600; font-size:13px; margin-top:8px; opacity:0.95">${note}</div>
+  </div>`;
+}
+
+function renderBlock(title, coreHtml, helpingHtml) {
+  const area = document.getElementById('contentArea');
+  area.innerHTML = `
+    <div class="archetypeTitle" id="archetypeTitle">${title}</div>
+    <div class="sectionTitle">Core Colours:</div>
+    <div class="cols">${coreHtml}</div>
+    <div class="sectionTitle">Helping Colours:</div>
+    <div class="cols" style="margin-bottom:6px;">${helpingHtml}</div>
+  `;
+}
+
+function showColorAnalysis() {
+  const storedName = localStorage.getItem('archetypeResult'); // preferred
+  const storedScoreRaw = localStorage.getItem('archetypeScore');
+  let scoreNum = null;
+  if (storedScoreRaw !== null && !isNaN(Number(storedScoreRaw))) {
+    scoreNum = Number(storedScoreRaw);
+  }
+
+  const key = (storedName && storedName.trim().length > 0) ? storedName : (scoreNum !== null ? scoreNum : null);
+
+  if (!key) {
+    document.getElementById('contentArea').innerHTML = `<div style="text-align:center;color:#666;padding:18px;border-radius:8px;background:#fff;"><strong>No saved result found.</strong><div style="margin-top:8px">Take the quiz first or set localStorage keys.</div></div>`;
+    return;
+  }
+
+  // Use if/else chain to match exactly the archetype names or score ranges.
+  const name = key;
+
+  // 0–5 | 🌫️ The Silent Ache
+  if ((typeof name === 'string' && name.indexOf("The Silent Ache") !== -1) || (typeof name === 'number' && name >= 0 && name <= 5)) {
+    const title = "0–5 | 🌫️ The Silent Ache";
+    const core = [];
+    core.push(swatchHTML("Ash Gray", "#B2BEB5", "fog, emptiness"));
+    core.push(swatchHTML("Muted Lavender", "#C4Aead", "quiet sadness"));
+    core.push(swatchHTML("Pale Smoke", "#E5E5E5", "drifting"));
+    core.push(swatchHTML("Dusty Blue", "#A9B3BC", "soft detachment"));
+    core.push(swatchHTML("Faded Sage", "#C7D3C4", "muted calm"));
+    const help = [];
+    help.push(swatchHTML("Warm Cream", "#FFF5E1", "gentle comfort"));
+    help.push(swatchHTML("Soft Rose", "#F6D1D1", "tenderness, self-care"));
+    help.push(swatchHTML("Light Peach", "#FFD9B3", "subtle warmth"));
+    help.push(swatchHTML("Sky Blue", "#A3C4F3", "lightness, breathing room"));
+    help.push(swatchHTML("Pale Mint", "#D3F0E1", "gentle refresh"));
+    renderBlock(title, core.join(""), help.join(""));
+    return;
+  }
+
+  // 6–10 | 🌙 The Wounded Dreamer
+  if ((typeof name === 'string' && name.indexOf("The Wounded Dreamer") !== -1) || (typeof name === 'number' && name >= 6 && name <= 10)) {
+    const title = "6–10 | 🌙 The Wounded Dreamer";
+    const core = [];
+    core.push(swatchHTML("Twilight Purple", "#7B5E87", "longing, wistful"));
+    core.push(swatchHTML("Dusky Rose", "#C68FA7", "tender ache"));
+    core.push(swatchHTML("Midnight Blue", "#2E3A59", "dreamy melancholy"));
+    core.push(swatchHTML("Slate Gray", "#708090", "realistic grounding"));
+    core.push(swatchHTML("Soft Plum", "#BFA0C9", "reflective thought"));
+    const help = [];
+    help.push(swatchHTML("Lavender Mist", "#D6C3E0", "gentle inspiration"));
+    help.push(swatchHTML("Sky Blue", "#A3C4F3", "expansiveness"));
+    help.push(swatchHTML("Lemon Cream", "#FFF9C4", "hope, new ideas"));
+    help.push(swatchHTML("Mint Green", "#BFF0D4", "growth and renewal"));
+    help.push(swatchHTML("Coral Peach", "#FFBFA3", "playful curiosity"));
+    renderBlock(title, core.join(""), help.join(""));
+    return;
+  }
+
+  // 11–15 | 🫧 The Fragile Survivor
+  if ((typeof name === 'string' && name.indexOf("The Fragile Survivor") !== -1) || (typeof name === 'number' && name >= 11 && name <= 15)) {
+    const title = "11–15 | 🫧 The Fragile Survivor";
+    const core = [];
+    core.push(swatchHTML("Storm Gray", "#8C9BA5", "vigilance, caution"));
+    core.push(swatchHTML("Deep Teal", "#2E5266", "introspection, protection"));
+    core.push(swatchHTML("Cool Taupe", "#B1A7A6", "guarded neutrality"));
+    core.push(swatchHTML("Shadow Blue", "#5A6A7B", "tension"));
+    core.push(swatchHTML("Soft Charcoal", "#4B4B4B", "underlying fear"));
+    const help = [];
+    help.push(swatchHTML("Warm Sand", "#E6D7B9", "grounding stability"));
+    help.push(swatchHTML("Light Sky", "#CDE7F0", "breathing space"));
+    help.push(swatchHTML("Peach Blush", "#FFD6C2", "self-soothing"));
+    help.push(swatchHTML("Moss Green", "#A8C1A3", "connection with safe spaces"));
+    help.push(swatchHTML("Honey Gold", "#F7D594", "gentle reassurance"));
+    renderBlock(title, core.join(""), help.join(""));
+    return;
+  }
+
+  // 16–20 | 🌧️ The Quiet Keeper
+  if ((typeof name === 'string' && name.indexOf("The Quiet Keeper") !== -1) || (typeof name === 'number' && name >= 16 && name <= 20)) {
+    const title = "16–20 | 🌧️ The Quiet Keeper";
+    const core = [];
+    core.push(swatchHTML("Deep Slate", "#4F5B66", "sorrow"));
+    core.push(swatchHTML("Stormy Blue", "#6B7B8C", "reflective sadness"));
+    core.push(swatchHTML("Ash Brown", "#A9A49B", "muted heaviness"));
+    core.push(swatchHTML("Soft Charcoal", "#5C5C5C", "weight of loss"));
+    core.push(swatchHTML("Mauve Mist", "#B4A7B1", "nostalgia"));
+    const help = [];
+    help.push(swatchHTML("Candlelight Gold", "#FFE4B2", "ritual warmth"));
+    help.push(swatchHTML("Soft Rose", "#F7D1D1", "tenderness"));
+    help.push(swatchHTML("Pale Aqua", "#BDE0EB", "gentle release"));
+    help.push(swatchHTML("Lavender Mist", "#D6C3E0", "calm sensitivity"));
+    help.push(swatchHTML("Light Sage", "#D8E3D0", "grounding remembrance"));
+    renderBlock(title, core.join(""), help.join(""));
+    return;
+  }
+
+  // 21–25 | 🧭 The Searching Soul
+  if ((typeof name === 'string' && name.indexOf("The Searching Soul") !== -1) || (typeof name === 'number' && name >= 21 && name <= 25)) {
+    const title = "21–25 | 🧭 The Searching Soul";
+    const core = [];
+    core.push(swatchHTML("Cloud Gray", "#BCC0C0", "mental fog"));
+    core.push(swatchHTML("Muted Teal", "#609EA2", "questioning"));
+    core.push(swatchHTML("Soft Sand", "#D3C5A9", "indecision"));
+    core.push(swatchHTML("Steel Blue", "#4E6E8E", "uncertainty"));
+    core.push(swatchHTML("Stone Taupe", "#A3988A", "inertia"));
+    const help = [];
+    help.push(swatchHTML("Spring Green", "#A7E6AF", "experimentation"));
+    help.push(swatchHTML("Sky Blue", "#A3C4F3", "clarity"));
+    help.push(swatchHTML("Lemon Yellow", "#FFF9B3", "curiosity spark"));
+    help.push(swatchHTML("Coral", "#FFAB91", "playful exploration"));
+    help.push(swatchHTML("Lavender", "#E6D0F0", "imaginative perspective"));
+    renderBlock(title, core.join(""), help.join(""));
+    return;
+  }
+
+  // 26–30 | 🌪️ The Restless Heart
+  if ((typeof name === 'string' && name.indexOf("The Restless Heart") !== -1) || (typeof name === 'number' && name >= 26 && name <= 30)) {
+    const title = "26–30 | 🌪️ The Restless Heart";
+    const core = [];
+    core.push(swatchHTML("Burnt Orange", "#D98E50", "impatience, movement"));
+    core.push(swatchHTML("Dusky Red", "#C75D5D", "longing"));
+    core.push(swatchHTML("Stormy Blue", "#607D8B", "drift"));
+    core.push(swatchHTML("Charcoal Gray", "#5C5C5C", "stagnation tension"));
+    core.push(swatchHTML("Dusty Taupe", "#B1A7A6", "indecision"));
+    const help = [];
+    help.push(swatchHTML("Energetic Coral", "#FF7F50", "motivation"));
+    help.push(swatchHTML("Sunshine Yellow", "#FFE066", "spark of desire"));
+    help.push(swatchHTML("Mint Green", "#A3E4C6", "fresh starts"));
+    help.push(swatchHTML("Sky Blue", "#A3C4F3", "expansion"));
+    help.push(swatchHTML("Warm Sand", "#F7D594", "grounding adventurous energy"));
+    renderBlock(title, core.join(""), help.join(""));
+    return;
+  }
+
+  // 31–35 | 🔥 The Hidden Flame
+  if ((typeof name === 'string' && name.indexOf("The Hidden Flame") !== -1) || (typeof name === 'number' && name >= 31 && name <= 35)) {
+    const title = "31–35 | 🔥 The Hidden Flame";
+    const core = [];
+    core.push(swatchHTML("Fire Red", "#D33F49", "anger"));
+    core.push(swatchHTML("Deep Burgundy", "#800020", "simmering intensity"));
+    core.push(swatchHTML("Charcoal", "#4B4B4B", "internal pressure"));
+    core.push(swatchHTML("Burnt Orange", "#D98352", "urgency"));
+    core.push(swatchHTML("Dark Rust", "#8B3A3A", "frustration"));
+    const help = [];
+    help.push(swatchHTML("Golden Amber", "#FFC069", "channeling energy"));
+    help.push(swatchHTML("Bright Teal", "#3EC1CD", "cooling reflection"));
+    help.push(swatchHTML("Warm Sand", "#F7D594", "gentle regulation"));
+    help.push(swatchHTML("Moss Green", "#8ABF8C", "grounded action"));
+    help.push(swatchHTML("Sky Blue", "#A3C4F3", "clarity in response"));
+    renderBlock(title, core.join(""), help.join(""));
+    return;
+  }
+
+  // 36–40 | 🌿 The Gentle Healer
+  if ((typeof name === 'string' && name.indexOf("The Gentle Healer") !== -1) || (typeof name === 'number' && name >= 36 && name <= 40)) {
+    const title = "36–40 | 🌿 The Gentle Healer";
+    const core = [];
+    core.push(swatchHTML("Sage Green", "#A3BFA8", "care, calm"));
+    core.push(swatchHTML("Soft Teal", "#7FB7B7", "over-giving awareness"));
+    core.push(swatchHTML("Powder Blue", "#B2D4E1", "gentle listening"));
+    core.push(swatchHTML("Cream", "#F5F1E3", "quiet nurturing"));
+    core.push(swatchHTML("Dusty Rose", "#D8A7A7", "emotional sensitivity"));
+    const help = [];
+    help.push(swatchHTML("Warm Peach", "#FFDAB3", "replenishing self"));
+    help.push(swatchHTML("Lemon Yellow", "#FFF9B3", "joy in giving wisely"));
+    help.push(swatchHTML("Soft Lavender", "#E6D0F0", "gentle boundaries"));
+    help.push(swatchHTML("Sky Blue", "#A3C4F3", "breathing space"));
+    help.push(swatchHTML("Moss Green", "#B7D3B3", "grounding support"));
+    renderBlock(title, core.join(""), help.join(""));
+    return;
+  }
+
+  // 41–45 | 🏔️ The Resilient Wanderer
+  if ((typeof name === 'string' && name.indexOf("The Resilient Wanderer") !== -1) || (typeof name === 'number' && name >= 41 && name <= 45)) {
+    const title = "41–45 | 🏔️ The Resilient Wanderer";
+    const core = [];
+    core.push(swatchHTML("Granite Gray", "#7A7A7A", "grit, endurance"));
+    core.push(swatchHTML("Deep Teal", "#356B6B", "inner resolve"));
+    core.push(swatchHTML("Burnt Umber", "#8C5E4F", "steady persistence"));
+    core.push(swatchHTML("Cloud Gray", "#BFC1C2", "delayed joy"));
+    core.push(swatchHTML("Navy Blue", "#2E3A59", "reserved strength"));
+    const help = [];
+    help.push(swatchHTML("Sunrise Gold", "#FFD966", "visible wins"));
+    help.push(swatchHTML("Soft Mint", "#B3E0C3", "rejuvenation"));
+    help.push(swatchHTML("Sky Blue", "#A3C4F3", "hope, expansion"));
+    help.push(swatchHTML("Warm Coral", "#FFB6A3", "celebration of self"));
+    help.push(swatchHTML("Lavender Mist", "#D6C3E0", "gentle encouragement"));
+    renderBlock(title, core.join(""), help.join(""));
+    return;
+  }
+
+  // 46–50 | 🫀 The Shattered Light
+  if ((typeof name === 'string' && name.indexOf("The Shattered Light") !== -1) || (typeof name === 'number' && name >= 46 && name <= 50)) {
+    const title = "46–50 | 🫀 The Shattered Light";
+    const core = [];
+    core.push(swatchHTML("Pale Rose", "#F3C6C6", "fragility"));
+    core.push(swatchHTML("Soft Gray", "#C5C5C5", "hesitation"));
+    core.push(swatchHTML("Misty Lavender", "#D7C7E1", "introspection"));
+    core.push(swatchHTML("Creamy Beige", "#EDE0D4", "withdrawn warmth"));
+    core.push(swatchHTML("Cool Aqua", "#BFDCE7", "guarded openness"));
+    const help = [];
+    help.push(swatchHTML("Warm Coral", "#FFBFA3", "slow trust"));
+    help.push(swatchHTML("Golden Yellow", "#FFE066", "self-permission"));
+    help.push(swatchHTML("Mint Green", "#BDE0D4", "grounding authenticity"));
+    help.push(swatchHTML("Sky Blue", "#A3C4F3", "emotional safety"));
+    help.push(swatchHTML("Soft Peach", "#FFDAB3", "gentle exposure"));
+    renderBlock(title, core.join(""), help.join(""));
+    return;
+  }
+
+  // 51–55 | 🌞 The Quiet Fighter
+  if ((typeof name === 'string' && name.indexOf("The Quiet Fighter") !== -1) || (typeof name === 'number' && name >= 51 && name <= 55)) {
+    const title = "51–55 | 🌞 The Quiet Fighter";
+    const core = [];
+    core.push(swatchHTML("Brick Red", "#B65A4C", "quiet strength"));
+    core.push(swatchHTML("Charcoal Gray", "#4B4B4B", "steady grind"));
+    core.push(swatchHTML("Deep Navy", "#2E3A59", "resolve"));
+    core.push(swatchHTML("Taupe", "#A89F91", "patient endurance"));
+    core.push(swatchHTML("Olive Green", "#708238", "persistence"));
+    const help = [];
+    help.push(swatchHTML("Sunrise Gold", "#FFD966", "courage reinforcement"));
+    help.push(swatchHTML("Sky Blue", "#A3C4F3", "clarity of action"));
+    help.push(swatchHTML("Coral", "#FF7F50", "motivation boost"));
+    help.push(swatchHTML("Soft Peach", "#FFDAB3", "encouragement"));
+    help.push(swatchHTML("Warm Sand", "#F7D594", "grounding in doubt"));
+    renderBlock(title, core.join(""), help.join(""));
+    return;
+  }
+
+  // 56–60 | 🌤️ The Gentle Dreamer
+  if ((typeof name === 'string' && name.indexOf("The Gentle Dreamer") !== -1) || (typeof name === 'number' && name >= 56 && name <= 60)) {
+    const title = "56–60 | 🌤️ The Gentle Dreamer";
+    const core = [];
+    core.push(swatchHTML("Soft Sky Blue", "#A3C4F3", "optimism"));
+    core.push(swatchHTML("Misty Lavender", "#D6C3E0", "dreamy vulnerability"));
+    core.push(swatchHTML("Pale Peach", "#FFDAB3", "naive hope"));
+    core.push(swatchHTML("Light Mint", "#B3E0C3", "gentle trust"));
+    core.push(swatchHTML("Cream", "#F5F1E3", "subtle steadiness"));
+    const help = [];
+    help.push(swatchHTML("Bright Yellow", "#FFF066", "optimism reinforcement"));
+    help.push(swatchHTML("Warm Coral", "#FFB6A3", "playful grounding"));
+    help.push(swatchHTML("Soft Aqua", "#BDE0D4", "wonder expansion"));
+    help.push(swatchHTML("Light Lilac", "#EADCF7", "gentle discernment"));
+    help.push(swatchHTML("Pale Rose", "#F7D1D1", "heartful hope"));
+    renderBlock(title, core.join(""), help.join(""));
+    return;
+  }
+
+  // 61–65 | 🌈 The Radiant Spirit
+  if ((typeof name === 'string' && name.indexOf("The Radiant Spirit") !== -1) || (typeof name === 'number' && name >= 61 && name <= 65)) {
+    const title = "61–65 | 🌈 The Radiant Spirit";
+    const core = [];
+    core.push(swatchHTML("Sunshine Yellow", "#FFE066", "joy"));
+    core.push(swatchHTML("Bright Coral", "#FF7F50", "playful energy"));
+    core.push(swatchHTML("Sky Blue", "#A3C4F3", "uplifting clarity"));
+    core.push(swatchHTML("Soft Lavender", "#E6D0F0", "lighthearted reflection"));
+    core.push(swatchHTML("Cream", "#FFF5E1", "openness"));
+    const help = [];
+    help.push(swatchHTML("Warm Gold", "#FFD966", "gratitude"));
+    help.push(swatchHTML("Mint Green", "#B3E0C3", "gentle balance"));
+    help.push(swatchHTML("Peach", "#FFDAB3", "heartful expression"));
+    help.push(swatchHTML("Pastel Pink", "#F7D1D1", "softness"));
+    help.push(swatchHTML("Pale Aqua", "#BDE0D4", "harmonious connection"));
+    renderBlock(title, core.join(""), help.join(""));
+    return;
+  }
+
+  // 66–70 | 🦁 The Brave Heart
+  if ((typeof name === 'string' && name.indexOf("The Brave Heart") !== -1) || (typeof name === 'number' && name >= 66 && name <= 70)) {
+    const title = "66–70 | 🦁 The Brave Heart";
+    const core = [];
+    core.push(swatchHTML("Lion Gold", "#E1A93C", "courage"));
+    core.push(swatchHTML("Deep Red", "#C75D5D", "protective energy"));
+    core.push(swatchHTML("Charcoal Gray", "#4B4B4B", "seriousness"));
+    core.push(swatchHTML("Warm Taupe", "#B89F91", "strength"));
+    core.push(swatchHTML("Teal Blue", "#356B6B", "controlled bravery"));
+    const help = [];
+    help.push(swatchHTML("Sky Blue", "#A3C4F3", "softening pride"));
+    help.push(swatchHTML("Coral", "#FF7F50", "encouraging courage"));
+    help.push(swatchHTML("Mint Green", "#BDE0D4", "gentle vulnerability"));
+    help.push(swatchHTML("Warm Sand", "#F7D594", "grounded strength"));
+    help.push(swatchHTML("Golden Yellow", "#FFE066", "bravery reinforcement"));
+    renderBlock(title, core.join(""), help.join(""));
+    return;
+  }
+
+  // 71–75 | 🔥 The Inner Flame
+  if ((typeof name === 'string' && name.indexOf("The Inner Flame") !== -1) || (typeof name === 'number' && name >= 71 && name <= 75)) {
+    const title = "71–75 | 🔥 The Inner Flame";
+    const core = [];
+    core.push(swatchHTML("Fiery Red", "#D33F49", "intense focus"));
+    core.push(swatchHTML("Deep Magenta", "#9B2C60", "obsession"));
+    core.push(swatchHTML("Burnt Orange", "#D98352", "urgency"));
+    core.push(swatchHTML("Charcoal", "#4B4B4B", "tunnel vision"));
+    core.push(swatchHTML("Plum", "#6F2B6F", "depth"));
+    const help = [];
+    help.push(swatchHTML("Bright Coral", "#FF7F50", "creative spark"));
+    help.push(swatchHTML("Warm Yellow", "#FFF066", "mental refresh"));
+    help.push(swatchHTML("Aqua", "#B3E0C3", "calm cycles"));
+    help.push(swatchHTML("Lavender", "#E6D0F0", "protective creativity"));
+    help.push(swatchHTML("Peach", "#FFDAB3", "gentle grounding"));
+    renderBlock(title, core.join(""), help.join(""));
+    return;
+  }
+
+  // 76–80 | 🕯️ The Guiding Light
+  if ((typeof name === 'string' && name.indexOf("The Guiding Light") !== -1) || (typeof name === 'number' && name >= 76 && name <= 80)) {
+    const title = "76–80 | 🕯️ The Guiding Light";
+    const core = [];
+    core.push(swatchHTML("Deep Teal", "#356B6B", "discernment"));
+    core.push(swatchHTML("Sage Green", "#A3BFA8", "grounding wisdom"));
+    core.push(swatchHTML("Gray Blue", "#7B8C99", "calm in crisis"));
+    core.push(swatchHTML("Charcoal", "#4B4B4B", "analytical edge"));
+    core.push(swatchHTML("Cream", "#F5F1E3", "reflective stability"));
+    const help = [];
+    help.push(swatchHTML("Sky Blue", "#A3C4F3", "clarity in advice"));
+    help.push(swatchHTML("Warm Gold", "#FFD966", "human warmth"));
+    help.push(swatchHTML("Pale Peach", "#FFDAB3", "balanced guidance"));
+    help.push(swatchHTML("Soft Lavender", "#E6D0F0", "emotional integration"));
+    help.push(swatchHTML("Mint Green", "#B3E0C3", "attentive listening"));
+    renderBlock(title, core.join(""), help.join(""));
+    return;
+  }
+
+  // 81–85 | 🌠 The Boundless Dreamer
+  if ((typeof name === 'string' && name.indexOf("The Boundless Dreamer") !== -1) || (typeof name === 'number' && name >= 81 && name <= 85)) {
+    const title = "81–85 | 🌠 The Boundless Dreamer";
+    const core = [];
+    core.push(swatchHTML("Electric Blue", "#4A90E2", "idea energy"));
+    core.push(swatchHTML("Bright Purple", "#9B59B6", "imagination"));
+    core.push(swatchHTML("Light Teal", "#7FD8D8", "fluidity"));
+    core.push(swatchHTML("Pale Yellow", "#FFF5B3", "curiosity"));
+    core.push(swatchHTML("Soft Gray", "#C5C5C5", "scattered thoughts"));
+    const help = [];
+    help.push(swatchHTML("Coral", "#FF7F50", "focus"));
+    help.push(swatchHTML("Mint Green", "#B3E0C3", "channeling creativity"));
+    help.push(swatchHTML("Sky Blue", "#A3C4F3", "clarity"));
+    help.push(swatchHTML("Warm Gold", "#FFD966", "inspiration reinforcement"));
+    help.push(swatchHTML("Lavender", "#E6D0F0", "reflective integration"));
+    renderBlock(title, core.join(""), help.join(""));
+    return;
+  }
+
+  // 86–90 | 🎙️ The Brave Creator
+  if ((typeof name === 'string' && name.indexOf("The Brave Creator") !== -1) || (typeof name === 'number' && name >= 86 && name <= 90)) {
+    const title = "86–90 | 🎙️ The Brave Creator";
+    const core = [];
+    core.push(swatchHTML("Coral", "#FF7F50", "sharing energy"));
+    core.push(swatchHTML("Warm Red", "#D33F49", "truth tension"));
+    core.push(swatchHTML("Deep Teal", "#356B6B", "vulnerability awareness"));
+    core.push(swatchHTML("Charcoal", "#4B4B4B", "exposure fear"));
+    core.push(swatchHTML("Pale Peach", "#FFDAB3", "hesitation"));
+    const help = [];
+    help.push(swatchHTML("Sky Blue", "#A3C4F3", "calm self-expression"));
+    help.push(swatchHTML("Mint Green", "#B3E0C3", "safe creativity"));
+    help.push(swatchHTML("Golden Yellow", "#FFE066", "confidence reinforcement"));
+    help.push(swatchHTML("Soft Lavender", "#E6D0F0", "gentle honesty"));
+    help.push(swatchHTML("Cream", "#FFF5E1", "grounding"));
+    renderBlock(title, core.join(""), help.join(""));
+    return;
+  }
+
+  // 91–95 | ❤️‍🔥 The Compassionate Flame
+  if ((typeof name === 'string' && name.indexOf("The Compassionate Flame") !== -1) || (typeof name === 'number' && name >= 91 && name <= 95)) {
+    const title = "91–95 | ❤️‍🔥 The Compassionate Flame";
+    const core = [];
+    core.push(swatchHTML("Rose Red", "#E74C3C", "deep love"));
+    core.push(swatchHTML("Coral", "#FF7F50", "caretaking"));
+    core.push(swatchHTML("Soft Pink", "#F7D1D1", "tenderness"));
+    core.push(swatchHTML("Warm Peach", "#FFDAB3", "over-giving"));
+    core.push(swatchHTML("Pale Aqua", "#BDE0D4", "longing for balance"));
+    const help = [];
+    help.push(swatchHTML("Sky Blue", "#A3C4F3", "reciprocal boundaries"));
+    help.push(swatchHTML("Golden Yellow", "#FFE066", "self-love"));
+    help.push(swatchHTML("Lavender", "#E6D0F0", "gentle perspective"));
+    help.push(swatchHTML("Soft Mint", "#B3E0C3", "harmonious connection"));
+    help.push(swatchHTML("Warm Sand", "#F7D594", "grounding presence"));
+    renderBlock(title, core.join(""), help.join(""));
+    return;
+  }
+
+  // 96–100 | 🌟 The Luminous Soul
+  if ((typeof name === 'string' && name.indexOf("The Luminous Soul") !== -1) || (typeof name === 'number' && name >= 96 && name <= 100)) {
+    const title = "96–100 | 🌟 The Luminous Soul";
+    const core = [];
+    core.push(swatchHTML("Soft Gold", "#FFE4B2", "steady presence"));
+    core.push(swatchHTML("Cream", "#FFF5E1", "gentleness"));
+    core.push(swatchHTML("Pale Sky", "#CDE7F0", "calm clarity"));
+    core.push(swatchHTML("Light Lavender", "#E6D0F0", "ethereal peace"));
+    core.push(swatchHTML("Soft Mint", "#B3E0C3", "inner balance"));
+    const help = [];
+    help.push(swatchHTML("Warm Coral", "#FFB6A3", "grounded generosity"));
+    help.push(swatchHTML("Golden Yellow", "#FFD966", "gentle radiance"));
+    help.push(swatchHTML("Sky Blue", "#A3C4F3", "calm community"));
+    help.push(swatchHTML("Peach", "#FFDAB3", "humility"));
+    help.push(swatchHTML("Soft Rose", "#F7D1D1", "tender resilience"));
+    renderBlock(title, core.join(""), help.join(""));
+    return;
+  }
+
+  // Default fallback
+  document.getElementById('contentArea').innerHTML = `<div style="text-align:center;color:#666;padding:18px;border-radius:8px;background:#fff;"><strong>No archetype found.</strong><div style="margin-top:8px">Make sure your quiz saved <code>localStorage.setItem('archetypeResult', '🌫️ The Silent Ache')</code> or <code>localStorage.setItem('archetypeScore', '7')</code>.</div></div>`;
+}
+
+// ------------------ Room Analysis Logic (mirrors Colour Analysis if-else style) ------------------
+
+function roomCardHTML(title, coreHtml, helpHtml) {
+  return `
+    <div class="archetypeTitle">${title}</div>
+    <div class="roomCols">
+      <div class="roomCard">
+        <h3>Ideal Room </h3>
+        ${coreHtml}
+      </div>
+      <div class="roomCard">
+        <h3>Summary</h3>
+        ${helpHtml}
+      </div>
+    </div>
+  `;
+}
+
+function roomSwatchHTML(name, hex, note) {
+  const textC = getContrastColor(hex);
+  return `<div style="margin-bottom:10px;">
+    <div class="roomSwatch" style="background:${hex}; color:${textC}">${name}</div>
+    <div style="margin-top:8px; color:#444; font-size:13px;">${note}</div>
+  </div>`;
+}
+
+function showRoomAnalysis() {
+  const storedName = localStorage.getItem('archetypeResult');
+  const storedScoreRaw = localStorage.getItem('archetypeScore');
+  let scoreNum = null;
+  if (storedScoreRaw !== null && !isNaN(Number(storedScoreRaw))) scoreNum = Number(storedScoreRaw);
+
+  const key = (storedName && storedName.trim().length > 0) ? storedName : (scoreNum !== null ? scoreNum : null);
+  if (!key) {
+    document.getElementById('roomContentArea').innerHTML = `<div style="text-align:center;color:#666;padding:18px;border-radius:8px;background:#fff;"><strong>No saved result found.</strong><div style="margin-top:8px">Take the quiz first or set localStorage keys.</div></div>`;
+    return;
+  }
+
+  const name = key;
+
+  // ROOM ANALYSIS CASES
+  // For each archetype, produce the full 15-component cards (core + helping)
+  // Content copied word-for-word from the provided document.
+
+  // 0–5 | 🌫️ The Silent Ache
+  if ((typeof name === 'string' && name.indexOf("The Silent Ache") !== -1) || (typeof name === 'number' && name >= 0 && name <= 5)) {
+    const title = "0–5 | 🌫️ The Silent Ache";
+    const coreHtml = `
+      <div>
+        <h4>1. Wall Color / Paint / Wallpaper</h4>
+        <div class="desc">Shades: Ash Gray, Muted Lavender, Pale Smoke, Dusty Blue, Faded Sage. Texture: Matte or watercolor soft finishes.</div>
+        <h4>2. Flooring</h4>
+        <div class="desc">Material: Light wood or soft carpet; neutral, low-contrast surfaces.</div>
+        <h4>3. Ceiling Design</h4>
+        <div class="desc">Flat or gently curved ceilings with soft ambient cove lighting.</div>
+        <h4>4. Lighting</h4>
+        <div class="desc">Types: Warm table lamps, dimmable overheads. Placement: Soft, layered lighting for low stimulation.</div>
+        <h4>5. Windows & Curtains/Blinds</h4>
+        <div class="desc">Medium windows; sheer layers with blackout options for retreat.</div>
+        <h4>6. Doors</h4>
+        <div class="desc">Soft-toned or wooden doors; sliding optional for quiet privacy.</div>
+        <h4>7. Furniture Layout</h4>
+        <div class="desc">Low, grounded furniture arranged to create small safe nooks and breathing spaces.</div>
+        <h4>8. Bed / Sofa Style</h4>
+        <div class="desc">Plush, neutral-toned bed/sofa with layered bedding and soft throws.</div>
+        <h4>9. Storage Units</h4>
+        <div class="desc">Closed storage to reduce visual noise; a few curated open surfaces.</div>
+        <h4>10. Décor & Art</h4>
+        <div class="desc">Minimal, nature-inspired art; soft abstracts and gentle imagery.</div>
+        <h4>11. Plants / Greenery</h4>
+        <div class="desc">Low-maintenance, calming plants: small ferns, philodendron, or single-stem greens.</div>
+        <h4>12. Technology</h4>
+        <div class="desc">Minimal tech: e-reader, simple music player, or meditation apps only.</div>
+        <h4>13. Mirrors</h4>
+        <div class="desc">Medium, framed mirrors in soft tones — avoid large reflective expanses.</div>
+        <h4>14. Carpets & Rugs</h4>
+        <div class="desc">Soft, textured rugs in calming colors; layered for coziness.</div>
+        <h4>15. Personal Touches</h4>
+        <div class="desc">Journals, scented candles, small keepsakes, self-care items — objects that invite quiet restoration.</div>
+      </div>
+    `;
+    const helpHtml = `
+      <div>
+        <p class="desc">Brief: A subdued, restorative room that protects energy, reduces visual noise, and invites gentle self-care.</p>
+      </div>
+    `;
+    document.getElementById('roomContentArea').innerHTML = roomCardHTML(title, coreHtml, helpHtml) + `<div class="roomCard" style="margin-top:16px;"><h3>Brief</h3><p>A soothing, restorative sanctuary where calm and gentle self-compassion are prioritized.</p></div>`;
+    return;
+  }
+
+  // 6–10 | 🌙 The Wounded Dreamer
+  if ((typeof name === 'string' && name.indexOf("The Wounded Dreamer") !== -1) || (typeof name === 'number' && name >= 6 && name <= 10)) {
+    const title = "6–10 | 🌙 The Wounded Dreamer";
+    const coreHtml = `
+      <div>
+        <h4>1. Wall Color / Paint / Wallpaper</h4>
+        <div class="desc">Shades: Twilight Purple, Dusky Rose, Midnight Blue, Slate Gray, Soft Plum. Texture: Matte or soft watercolor murals.</div>
+        <h4>2. Flooring</h4>
+        <div class="desc">Material: Warm wood with soft rugs; neutral tones that allow for reflective pause.</div>
+        <h4>3. Ceiling Design</h4>
+        <div class="desc">Flat with indirect lighting or gentle coves to soften the vertical field.</div>
+        <h4>4. Lighting</h4>
+        <div class="desc">Types: Warm table lamps, adjustable floor lamps, layered ambient LEDs for mood regulation.</div>
+        <h4>5. Windows & Curtains/Blinds</h4>
+        <div class="desc">Medium windows; sheer and blackout layering for controllable retreat.</div>
+        <h4>6. Doors</h4>
+        <div class="desc">Wood or soft-toned doors; consider sliding for flexible privacy.</div>
+        <h4>7. Furniture Layout</h4>
+        <div class="desc">Cozy seating clusters for reflective moments and gentle connection.</div>
+        <h4>8. Bed / Sofa Style</h4>
+        <div class="desc">Plush bed/sofa with layered textiles and sentimental cushions.</div>
+        <h4>9. Storage Units</h4>
+        <div class="desc">Balance closed storage with small display niches for treasured items.</div>
+        <h4>10. Décor & Art</h4>
+        <div class="desc">Dreamy, wistful art and personal photographs that invite safe longing.</div>
+        <h4>11. Plants / Greenery</h4>
+        <div class="desc">Sensitive, soft-leaf plants: small ferns, potted herbs, or trailing philodendron.</div>
+        <h4>12. Technology</h4>
+        <div class="desc">Minimal; devices for gentle inspiration (music, audiobooks).</div>
+        <h4>13. Mirrors</h4>
+        <div class="desc">Medium framed mirrors that reflect warmth without sharp glare.</div>
+        <h4>14. Carpets & Rugs</h4>
+        <div class="desc">Soft rugs in muted tones to add tactile calm.</div>
+        <h4>15. Personal Touches</h4>
+        <div class="desc">Handwritten notes, soft textiles, small keepsakes that honor longing.</div>
+      </div>
+    `;
+    const helpHtml = `<div><p class="desc">Brief: A tender, reflective space that honours longing while offering gentle containment.</p></div>`;
+    document.getElementById('roomContentArea').innerHTML = roomCardHTML(title, coreHtml, helpHtml) + `<div class="roomCard" style="margin-top:16px;"><h3>Brief</h3><p>A quiet room for reflection and dreamy restoration.</p></div>`;
+    return;
+  }
+
+  // 11–15 | 🫧 The Fragile Survivor
+  if ((typeof name === 'string' && name.indexOf("The Fragile Survivor") !== -1) || (typeof name === 'number' && name >= 11 && name <= 15)) {
+    const title = "11–15 | 🫧 The Fragile Survivor";
+    const coreHtml = `
+      <div>
+        <h4>1. Wall Color / Paint / Wallpaper</h4>
+        <div class="desc">Shades: Soft Pearl, Misty Blue, Blush Pink, Light Lavender, Warm Gray. Texture: Matte or gentle textured finishes; optional subtle reflective mural.</div>
+        <h4>2. Flooring</h4>
+        <div class="desc">Material: Hardwood with soft rugs or carpet; neutral and tactile surfaces.</div>
+        <h4>3. Ceiling Design</h4>
+        <div class="desc">Flat with soft indirect lighting or a gentle cove to avoid overwhelm.</div>
+        <h4>4. Lighting</h4>
+        <div class="desc">Types: Warm table lamps, adjustable floor lamps, ambient LEDs with layered control.</div>
+        <h4>5. Windows & Curtains/Blinds</h4>
+        <div class="desc">Medium windows; layered sheer and blackout curtains for adjustable retreat.</div>
+        <h4>6. Doors</h4>
+        <div class="desc">Solid wood or soft-toned doors to reinforce privacy and security.</div>
+        <h4>7. Furniture Layout</h4>
+        <div class="desc">Cozy, intentional layout with small safe zones for solitude and gentle company.</div>
+        <h4>8. Bed / Sofa Style</h4>
+        <div class="desc">Soft, supportive bed/sofa with plush textures and neutral tones for restful recovery.</div>
+        <h4>9. Storage Units</h4>
+        <div class="desc">Closed and organized storage; discreet shelving for personal treasures.</div>
+        <h4>10. Décor & Art</h4>
+        <div class="desc">Soft, reflective art and personal photos; calming abstracts to support processing.</div>
+        <h4>11. Plants / Greenery</h4>
+        <div class="desc">Small to medium gentle greenery: peace lilies, ferns, or small flowering plants.</div>
+        <h4>12. Technology</h4>
+        <div class="desc">Minimal; soft sounds, meditative apps, journaling devices for predictable calm.</div>
+        <h4>13. Mirrors</h4>
+        <div class="desc">Medium, framed mirrors; avoid large expanses that might overexpose.</div>
+        <h4>14. Carpets & Rugs</h4>
+        <div class="desc">Soft, low-pile rugs in muted tones for tactile security.</div>
+        <h4>15. Personal Touches</h4>
+        <div class="desc">Familiar objects: photos of loved ones, comforting trinkets, soft textiles to increase perceived control.</div>
+      </div>
+    `;
+    const helpHtml = `<div><p class="desc">Brief: A predictable, gently comforting sanctuary supporting emotional regulation and safety.</p></div>`;
+    document.getElementById('roomContentArea').innerHTML = roomCardHTML(title, coreHtml, helpHtml) + `<div class="roomCard" style="margin-top:16px;"><h3>Brief</h3><p>Predictable, safe, and quietly restorative.</p></div>`;
+    return;
+  }
+
+  // 16–20 | 🌧️ The Quiet Keeper
+  if ((typeof name === 'string' && name.indexOf("The Quiet Keeper") !== -1) || (typeof name === 'number' && name >= 16 && name <= 20)) {
+    const title = "16–20 | 🌧️ The Quiet Keeper";
+    const coreHtml = `
+      <div>
+        <h4>1. Wall Color / Paint / Wallpaper</h4>
+        <div class="desc">Shades: Soft Blue-Gray, Muted Teal, Warm Taupe, Pale Lilac. Texture: Matte or light textured finishes with flowing imagery.</div>
+        <h4>2. Flooring</h4>
+        <div class="desc">Material: Warm wood, cork, or soft carpet with tactile area rugs.</div>
+        <h4>3. Ceiling Design</h4>
+        <div class="desc">Soft flat or coved ceilings with indirect warm lighting.</div>
+        <h4>4. Lighting</h4>
+        <div class="desc">Warm, layered ambient lighting for ritual and reflection.</div>
+        <h4>5. Windows & Curtains/Blinds</h4>
+        <div class="desc">Medium windows with sheer-to-blackout layers for flexible retreat.</div>
+        <h4>6. Doors</h4>
+        <div class="desc">Wood doors with soft tones to encourage privacy and containment.</div>
+        <h4>7. Furniture Layout</h4>
+        <div class="desc">Cozy nooks and gentle seating arrangements to support ritual and reflection.</div>
+        <h4>8. Bed / Sofa Style</h4>
+        <div class="desc">Soft, supportive bedding with comforting textures.</div>
+        <h4>9. Storage Units</h4>
+        <div class="desc">Organized closed storage with discreet display opportunities.</div>
+        <h4>10. Décor & Art</h4>
+        <div class="desc">Flowing, nature-inspired art to support emotional expression and remembrance.</div>
+        <h4>11. Plants / Greenery</h4>
+        <div class="desc">Calming plants that support quiet energy: peace lilies, soft-leaf varieties.</div>
+        <h4>12. Technology</h4>
+        <div class="desc">Minimal tech; devices that support ritual (soft music, guided practices).</div>
+        <h4>13. Mirrors</h4>
+        <div class="desc">Medium mirrors to reflect light gently without harshness.</div>
+        <h4>14. Carpets & Rugs</h4>
+        <div class="desc">Soft layered rugs that add warmth and tactile reassurance.</div>
+        <h4>15. Personal Touches</h4>
+        <div class="desc">Ritual objects, journals, remembrance pieces, and gentle textiles.</div>
+      </div>
+    `;
+    const helpHtml = `<div><p class="desc">Brief: A contemplative, ritual-friendly room to hold sensitive emotion and gradual healing.</p></div>`;
+    document.getElementById('roomContentArea').innerHTML = roomCardHTML(title, coreHtml, helpHtml) + `<div class="roomCard" style="margin-top:16px;"><h3>Brief</h3><p>Supportive, ritual-focused sanctuary for processing and sensitive restoration.</p></div>`;
+    return;
+  }
+
+  // 21–25 | 🧭 The Searching Soul
+  if ((typeof name === 'string' && name.indexOf("The Searching Soul") !== -1) || (typeof name === 'number' && name >= 21 && name <= 25)) {
+    const title = "21–25 | 🧭 The Searching Soul";
+    const coreHtml = `
+      <div>
+        <h4>1. Wall Color / Paint / Wallpaper</h4>
+        <div class="desc">Shades: Cloud Gray, Muted Teal, Soft Sand, Steel Blue, Stone Taupe. Texture: subtle patterns inviting curiosity.</div>
+        <h4>2. Flooring</h4>
+        <div class="desc">Neutral wood or cork with layered rugs to define experiment zones.</div>
+        <h4>3. Ceiling Design</h4>
+        <div class="desc">Flat ceilings with flexible lighting for task and reflection.</div>
+        <h4>4. Lighting</h4>
+        <div class="desc">Layered lighting that allows switching between focus and rest.</div>
+        <h4>5. Windows & Curtains/Blinds</h4>
+        <div class="desc">Adjustable windows coverings to manage stimulation during deep thinking.</div>
+        <h4>6. Doors</h4>
+        <div class="desc">Solid doors to create focus when needed; consider sound reduction.</div>
+        <h4>7. Furniture Layout</h4>
+        <div class="desc">Zones for research, making, and quiet reflection; modular pieces welcome.</div>
+        <h4>8. Bed / Sofa Style</h4>
+        <div class="desc">Comfortable bedding with neutral tones; a dedicated reading nook.</div>
+        <h4>9. Storage Units</h4>
+        <div class="desc">Accessible storage for experiments, notebooks, and tools.</div>
+        <h4>10. Décor & Art</h4>
+        <div class="desc">Curiosity-sparking objects, maps, or mood boards.</div>
+        <h4>11. Plants / Greenery</h4>
+        <div class="desc">Spring greens and small planters to refresh the mind.</div>
+        <h4>12. Technology</h4>
+        <div class="desc">Useful tech: research tools, organizational apps; keep entertainment limited.</div>
+        <h4>13. Mirrors</h4>
+        <div class="desc">Medium mirrors that expand perceived space without distraction.</div>
+        <h4>14. Carpets & Rugs</h4>
+        <div class="desc">Neutral rugs to ground different work zones.</div>
+        <h4>15. Personal Touches</h4>
+        <div class="desc">Notebooks, timelines, prototypes — items that scaffold exploration.</div>
+      </div>
+    `;
+    const helpHtml = `<div><p class="desc">Brief: A laboratory-like, curious sanctuary that supports iterative searching and gentle experimentation.</p></div>`;
+    document.getElementById('roomContentArea').innerHTML = roomCardHTML(title, coreHtml, helpHtml) + `<div class="roomCard" style="margin-top:16px;"><h3>Brief</h3><p>Encourages exploration, clarity, and iterative learning.</p></div>`;
+    return;
+  }
+
+  // 26–30 | 🌪️ The Restless Heart
+  if ((typeof name === 'string' && name.indexOf("The Restless Heart") !== -1) || (typeof name === 'number' && name >= 26 && name <= 30)) {
+    const title = "26–30 | 🌪️ The Restless Heart";
+    const coreHtml = `
+      <div>
+        <h4>1. Wall Color / Paint / Wallpaper</h4>
+        <div class="desc">Shades: Burnt Orange, Dusky Red, Stormy Blue, Charcoal Gray, Dusty Taupe.</div>
+        <h4>2. Flooring</h4>
+        <div class="desc">Durable materials with bold area rugs to anchor movement.</div>
+        <h4>3. Ceiling Design</h4>
+        <div class="desc">Flat or slightly vaulted ceilings with adjustable spotlights.</div>
+        <h4>4. Lighting</h4>
+        <div class="desc">Bright task lights and layered ambient options to match energy shifts.</div>
+        <h4>5. Windows & Curtains/Blinds</h4>
+        <div class="desc">Large windows to allow expansive views and reduce feeling of confinement.</div>
+        <h4>6. Doors</h4>
+        <div class="desc">Sturdy doors with easy flow to encourage movement in/out.</div>
+        <h4>7. Furniture Layout</h4>
+        <div class="desc">Flexible furniture to support activity and quick reconfiguration.</div>
+        <h4>8. Bed / Sofa Style</h4>
+        <div class="desc">Comfortable, layered seating with energetic throws.</div>
+        <h4>9. Storage Units</h4>
+        <div class="desc">Accessible storage for gear and objects that support activity.</div>
+        <h4>10. Décor & Art</h4>
+        <div class="desc">Dynamic visuals, travel souvenirs, or objects that fuel desire.</div>
+        <h4>11. Plants / Greenery</h4>
+        <div class="desc">Lively plants to support vitality and movement energy.</div>
+        <h4>12. Technology</h4>
+        <div class="desc">Motivational tech: music systems, activity trackers; keep some tech discreet.</div>
+        <h4>13. Mirrors</h4>
+        <div class="desc">Medium mirrors to reflect motion and support energetic practice.</div>
+        <h4>14. Carpets & Rugs</h4>
+        <div class="desc">Bold rugs to define zones and add visual momentum.</div>
+        <h4>15. Personal Touches</h4>
+        <div class="desc">Travel logs, goal boards, items that keep desire in sight.</div>
+      </div>
+    `;
+    const helpHtml = `<div><p class="desc">Brief: An energizing, reconfigurable space for channeling restless drive into action.</p></div>`;
+    document.getElementById('roomContentArea').innerHTML = roomCardHTML(title, coreHtml, helpHtml) + `<div class="roomCard" style="margin-top:16px;"><h3>Brief</h3><p>Designed to move; supports quick focus shifts and renewed starts.</p></div>`;
+    return;
+  }
+
+  // 31–35 | 🔥 The Hidden Flame
+  if ((typeof name === 'string' && name.indexOf("The Hidden Flame") !== -1) || (typeof name === 'number' && name >= 31 && name <= 35)) {
+    const title = "31–35 | 🔥 The Hidden Flame";
+    const coreHtml = `
+      <div>
+        <h4>1. Wall Color / Paint / Wallpaper</h4>
+        <div class="desc">Shades: Fire Red, Deep Burgundy, Charcoal, Burnt Orange, Dark Rust.</div>
+        <h4>2. Flooring</h4>
+        <div class="desc">Durable surfaces: hardwood, concrete, or warm-toned carpets with defined creative zones.</div>
+        <h4>3. Ceiling Design</h4>
+        <div class="desc">Controlled ceiling with spotlights to focus intensity.</div>
+        <h4>4. Lighting</h4>
+        <div class="desc">Adjustable task lights, spotlights, and ambient warm lights for dramatic focus.</div>
+        <h4>5. Windows & Curtains/Blinds</h4>
+        <div class="desc">Medium-large windows with strong blinds to control glare and intensity.</div>
+        <h4>6. Doors</h4>
+        <div class="desc">Solid doors to demarcate private, high-energy zones.</div>
+        <h4>7. Furniture Layout</h4>
+        <div class="desc">Predictable, minimal layout that channels energy into tasks.</div>
+        <h4>8. Bed / Sofa Style</h4>
+        <div class="desc">Supportive, structured furniture with bold accents.</div>
+        <h4>9. Storage Units</h4>
+        <div class="desc">Organized storage to keep intensity focused and clutter minimal.</div>
+        <h4>10. Décor & Art</h4>
+        <div class="desc">Bold, symbolic art that channels passion into purpose.</div>
+        <h4>11. Plants / Greenery</h4>
+        <div class="desc">Strong foliage; medium plants that reinforce grounded action.</div>
+        <h4>12. Technology</h4>
+        <div class="desc">Task-focused tech and inspirational media for directed energy.</div>
+        <h4>13. Mirrors</h4>
+        <div class="desc">Medium mirrors to encourage focused self-reflection.</div>
+        <h4>14. Carpets & Rugs</h4>
+        <div class="desc">Durable, textured rugs in warm tones to anchor activity.</div>
+        <h4>15. Personal Touches</h4>
+        <div class="desc">Journals, goal trackers, motivational objects that convert heat into action.</div>
+      </div>
+    `;
+    const helpHtml = `<div><p class="desc">Brief: A focused, bold environment to transform intensity into structured output.</p></div>`;
+    document.getElementById('roomContentArea').innerHTML = roomCardHTML(title, coreHtml, helpHtml) + `<div class="roomCard" style="margin-top:16px;"><h3>Brief</h3><p>Structure for intensity; safety for action.</p></div>`;
+    return;
+  }
+
+  // 36–40 | 🌿 The Gentle Healer
+  if ((typeof name === 'string' && name.indexOf("The Gentle Healer") !== -1) || (typeof name === 'number' && name >= 36 && name <= 40)) {
+    const title = "36–40 | 🌿 The Gentle Healer";
+    const coreHtml = `
+      <div>
+        <h4>1. Wall Color / Paint / Wallpaper</h4>
+        <div class="desc">Shades: Soft Sage, Muted Lavender, Warm Cream, Powder Blue, Pale Rose. Texture: Matte or lightly textured; optional soft watercolor-style mural.</div>
+        <h4>2. Flooring</h4>
+        <div class="desc">Soft wood, cork, or plush carpet; layered cozy rugs for tactile grounding.</div>
+        <h4>3. Ceiling Design</h4>
+        <div class="desc">Flat or gentle curve; indirect warm lighting.</div>
+        <h4>4. Lighting</h4>
+        <div class="desc">Types: Warm LEDs, table lamps, adjustable ambient lighting. Placement: Soft, layered lighting for quiet zones and reading corners.</div>
+        <h4>5. Windows & Curtains/Blinds</h4>
+        <div class="desc">Medium-large windows; sheer curtains layered with blackout options to modulate stimulation.</div>
+        <h4>6. Doors</h4>
+        <div class="desc">Wood or soft-toned doors; sliding optional for flexible privacy.</div>
+        <h4>7. Furniture Layout</h4>
+        <div class="desc">Cozy, layered arrangement with personal nooks for retreat and reflection.</div>
+        <h4>8. Bed / Sofa Style</h4>
+        <div class="desc">Soft, plush bed/sofa with neutral tones and comforting textures.</div>
+        <h4>9. Storage Units</h4>
+        <div class="desc">Closed units for personal items; open shelving for gentle inspiration.</div>
+        <h4>10. Décor & Art</h4>
+        <div class="desc">Nature-inspired, calming art; personal photographs; small meaningful objects.</div>
+        <h4>11. Plants / Greenery</h4>
+        <div class="desc">Medium-low maintenance plants: ferns, peace lilies, philodendron.</div>
+        <h4>12. Technology</h4>
+        <div class="desc">Minimal; e-reader, music player, or meditation apps to support restoration.</div>
+        <h4>13. Mirrors</h4>
+        <div class="desc">Medium, framed mirrors in soft tones to reflect light gently.</div>
+        <h4>14. Carpets & Rugs</h4>
+        <div class="desc">Soft, textured rugs in calming colors; layered for warmth.</div>
+        <h4>15. Personal Touches</h4>
+        <div class="desc">Journals, scented candles, small keepsakes, self-care items to encourage restoration.</div>
+      </div>
+    `;
+    const helpHtml = `<div><p class="desc">Brief: A nurturing, boundary-respecting room to prevent empathic burnout and support replenishment.</p></div>`;
+    document.getElementById('roomContentArea').innerHTML = roomCardHTML(title, coreHtml, helpHtml) + `<div class="roomCard" style="margin-top:16px;"><h3>Brief</h3><p>Warm, gentle, and restorative — designed to protect emotional energy.</p></div>`;
+    return;
+  }
+
+  // 41–45 | 🏔️ The Resilient Wanderer
+  if ((typeof name === 'string' && name.indexOf("The Resilient Wanderer") !== -1) || (typeof name === 'number' && name >= 41 && name <= 45)) {
+    const title = "41–45 | 🏔️ The Resilient Wanderer";
+    const coreHtml = `
+      <div>
+        <h4>1. Wall Color / Paint / Wallpaper</h4>
+        <div class="desc">Shades: Granite Gray, Deep Teal, Burnt Umber, Cloud Gray, Navy Blue.</div>
+        <h4>2. Flooring</h4>
+        <div class="desc">Durable hardwood with area rugs for rest and recovery.</div>
+        <h4>3. Ceiling Design</h4>
+        <div class="desc">Flat ceilings with practical ambient lighting.</div>
+        <h4>4. Lighting</h4>
+        <div class="desc">Task and ambient lighting to support long-term focus and rest.</div>
+        <h4>5. Windows & Curtains/Blinds</h4>
+        <div class="desc">Medium-large windows to invite daylight and hope.</div>
+        <h4>6. Doors</h4>
+        <div class="desc">Sturdy doors with simple hardware to reinforce boundaries.</div>
+        <h4>7. Furniture Layout</h4>
+        <div class="desc">Structured zones for work, rest, and small celebrations of progress.</div>
+        <h4>8. Bed / Sofa Style</h4>
+        <div class="desc">Comfortable, supportive bedding and seating with warm textiles.</div>
+        <h4>9. Storage Units</h4>
+        <div class="desc">Organized closed storage and display shelves for achievements.</div>
+        <h4>10. Décor & Art</h4>
+        <div class="desc">Inspiring art, maps, and subtle reminders of milestones.</div>
+        <h4>11. Plants / Greenery</h4>
+        <div class="desc">Sturdy, resilient plants: snake plant, fiddle leaf fig, or small trees.</div>
+        <h4>12. Technology</h4>
+        <div class="desc">Task-focused devices, smart lighting control, and productivity tools.</div>
+        <h4>13. Mirrors</h4>
+        <div class="desc">Medium mirrors for self-reflection and accountability.</div>
+        <h4>14. Carpets & Rugs</h4>
+        <div class="desc">Durable textured rugs in earthy tones to anchor space.</div>
+        <h4>15. Personal Touches</h4>
+        <div class="desc">Journals, awards, mementos of perseverance that reinforce identity.</div>
+      </div>
+    `;
+    const helpHtml = `<div><p class="desc">Brief: A grounded, achievement-friendly room that balances perseverance with small restorative practices.</p></div>`;
+    document.getElementById('roomContentArea').innerHTML = roomCardHTML(title, coreHtml, helpHtml) + `<div class="roomCard" style="margin-top:16px;"><h3>Brief</h3><p>Stability + visible progress cues to sustain long-term goals.</p></div>`;
+    return;
+  }
+
+  // 46–50 | 🫀 The Shattered Light
+  if ((typeof name === 'string' && name.indexOf("The Shattered Light") !== -1) || (typeof name === 'number' && name >= 46 && name <= 50)) {
+    const title = "46–50 | 🫀 The Shattered Light";
+    const coreHtml = `
+      <div>
+        <h4>1. Wall Color / Paint / Wallpaper</h4>
+        <div class="desc">Shades: Pale Rose, Soft Gray, Misty Lavender, Creamy Beige, Cool Aqua. Texture: Soft, matte finishes.</div>
+        <h4>2. Flooring</h4>
+        <div class="desc">Hardwood or warm carpets with soft area rugs for comfort.</div>
+        <h4>3. Ceiling Design</h4>
+        <div class="desc">Flat ceilings with soft indirect lighting to avoid visual shock.</div>
+        <h4>4. Lighting</h4>
+        <div class="desc">Warm, low-contrast lighting and layered lamps for control.</div>
+        <h4>5. Windows & Curtains/Blinds</h4>
+        <div class="desc">Medium windows with layered coverings for slow trust and privacy.</div>
+        <h4>6. Doors</h4>
+        <div class="desc">Solid wood doors; consider sliding for fluid privacy.</div>
+        <h4>7. Furniture Layout</h4>
+        <div class="desc">Intimate, cozy zones that protect from overstimulation.</div>
+        <h4>8. Bed / Sofa Style</h4>
+        <div class="desc">Plush, supportive bedding and quiet seating in neutral hues.</div>
+        <h4>9. Storage Units</h4>
+        <div class="desc">Closed storage with discreet places for treasured objects.</div>
+        <h4>10. Décor & Art</h4>
+        <div class="desc">Soft reflective art and personal photos to encourage safe expression.</div>
+        <h4>11. Plants / Greenery</h4>
+        <div class="desc">Gentle greenery: peace lilies, small flowering plants.</div>
+        <h4>12. Technology</h4>
+        <div class="desc">Minimal tech: meditative apps, soft sound players for slow trust building.</div>
+        <h4>13. Mirrors</h4>
+        <div class="desc">Medium framed mirrors; avoid large reflective expanses to protect privacy.</div>
+        <h4>14. Carpets & Rugs</h4>
+        <div class="desc">Soft layered rugs in muted tones to add warmth and safety.</div>
+        <h4>15. Personal Touches</h4>
+        <div class="desc">Journals, letters, personal mementos, and soft textiles for safe expression.</div>
+      </div>
+    `;
+    const helpHtml = `<div><p class="desc">Brief: A safe, reflective sanctuary that supports slow vulnerability and healing.</p></div>`;
+    document.getElementById('roomContentArea').innerHTML = roomCardHTML(title, coreHtml, helpHtml) + `<div class="roomCard" style="margin-top:16px;"><h3>Brief</h3><p>Soft containment for gradual trust and authentic expression.</p></div>`;
+    return;
+  }
+
+  // 51–55 | 🌞 The Quiet Fighter
+  if ((typeof name === 'string' && name.indexOf("The Quiet Fighter") !== -1) || (typeof name === 'number' && name >= 51 && name <= 55)) {
+    const title = "51–55 | 🌞 The Quiet Fighter";
+    const coreHtml = `
+      <div>
+        <h4>1. Wall Color / Paint / Wallpaper</h4>
+        <div class="desc">Shades: Warm Sand, Soft Taupe, Sunlit Yellow, Terracotta, Light Olive.</div>
+        <h4>2. Flooring</h4>
+        <div class="desc">Hardwood, cork, or neutral tiles with cozy area rugs in warm hues.</div>
+        <h4>3. Ceiling Design</h4>
+        <div class="desc">Flat or shallow tray ceilings with warm recessed lighting.</div>
+        <h4>4. Lighting</h4>
+        <div class="desc">Task lights, warm ambient lamps, and adjustable LEDs for work and rest.</div>
+        <h4>5. Windows & Curtains/Blinds</h4>
+        <div class="desc">Medium-large windows with layered drapes to manage light and privacy.</div>
+        <h4>6. Doors</h4>
+        <div class="desc">Sturdy doors in warm tones to reinforce boundaries.</div>
+        <h4>7. Furniture Layout</h4>
+        <div class="desc">Structured zones for productivity, rest, and celebration of small wins.</div>
+        <h4>8. Bed / Sofa Style</h4>
+        <div class="desc">Firm supportive bed/sofa with layered textiles and warm accents.</div>
+        <h4>9. Storage Units</h4>
+        <div class="desc">Closed, organized storage with labeled compartments for efficiency.</div>
+        <h4>10. Décor & Art</h4>
+        <div class="desc">Minimalist art, framed quotes, and motivational accents that encourage action.</div>
+        <h4>11. Plants / Greenery</h4>
+        <div class="desc">Low-maintenance plants that bring calm focus: succulents, snake plants.</div>
+        <h4>12. Technology</h4>
+        <div class="desc">Productivity tools, goal trackers, and minimal entertainment tech.</div>
+        <h4>13. Mirrors</h4>
+        <div class="desc">Medium-sized mirrors for accountability and self-checks.</div>
+        <h4>14. Carpets & Rugs</h4>
+        <div class="desc">Durable rugs that define activity zones and add tactile warmth.</div>
+        <h4>15. Personal Touches</h4>
+        <div class="desc">Journals, planners, small mementos of achievement to sustain drive.</div>
+      </div>
+    `;
+    const helpHtml = `<div><p class="desc">Brief: A disciplined, warm environment that supports steady action and visible progress.</p></div>`;
+    document.getElementById('roomContentArea').innerHTML = roomCardHTML(title, coreHtml, helpHtml) + `<div class="roomCard" style="margin-top:16px;"><h3>Brief</h3><p>Structure + encouragement to convert effort into momentum.</p></div>`;
+    return;
+  }
+
+  // 56–60 | 🌤️ The Gentle Dreamer
+  if ((typeof name === 'string' && name.indexOf("The Gentle Dreamer") !== -1) || (typeof name === 'number' && name >= 56 && name <= 60)) {
+    const title = "56–60 | 🌤️ The Gentle Dreamer";
+    const coreHtml = `
+      <div>
+        <h4>1. Wall Color / Paint / Wallpaper</h4>
+        <div class="desc">Shades: Sky Blue, Soft Mint, Warm Cream, Pale Peach, Lavender Mist.</div>
+        <h4>2. Flooring</h4>
+        <div class="desc">Light hardwood, bamboo, or soft carpet with layered rugs in soft hues.</div>
+        <h4>3. Ceiling Design</h4>
+        <div class="desc">Flat or slightly vaulted with indirect soft lighting.</div>
+        <h4>4. Lighting</h4>
+        <div class="desc">Soft ambient lighting, gentle task lamps for reading and creation.</div>
+        <h4>5. Windows & Curtains/Blinds</h4>
+        <div class="desc">Large windows with light-filtering layers to encourage gentle wonder.</div>
+        <h4>6. Doors</h4>
+        <div class="desc">Light-toned doors to maintain openness and airy feeling.</div>
+        <h4>7. Furniture Layout</h4>
+        <div class="desc">Open layouts with cozy corners for reading and imagination.</div>
+        <h4>8. Bed / Sofa Style</h4>
+        <div class="desc">Layered, comfortable bedding with pastel cushions and soft throws.</div>
+        <h4>9. Storage Units</h4>
+        <div class="desc">Open shelving for mementos and soft baskets for organization.</div>
+        <h4>10. Décor & Art</h4>
+        <div class="desc">Whimsical art, dreamy murals, and interactive decor for wonder.</div>
+        <h4>11. Plants / Greenery</h4>
+        <div class="desc">Small potted plants, airy trailing vines to encourage curiosity.</div>
+        <h4>12. Technology</h4>
+        <div class="desc">Minimal: gentle interactive elements, soft lights, and music for ambience.</div>
+        <h4>13. Mirrors</h4>
+        <div class="desc">Optional small mirrors to expand light and dreamlike atmosphere.</div>
+        <h4>14. Carpets & Rugs</h4>
+        <div class="desc">Soft rugs in pastel palettes to define cozy wonder corners.</div>
+        <h4>15. Personal Touches</h4>
+        <div class="desc">Sketchbooks, small collectibles, and items that inspire hopeful imagination.</div>
+      </div>
+    `;
+    const helpHtml = `<div><p class="desc">Brief: An airy, gentle room that cultivates imaginative calm and hopeful reflection.</p></div>`;
+    document.getElementById('roomContentArea').innerHTML = roomCardHTML(title, coreHtml, helpHtml) + `<div class="roomCard" style="margin-top:16px;"><h3>Brief</h3><p>Soft, inspiring, and protective of wonder.</p></div>`;
+    return;
+  }
+
+  // 61–65 | 🌈 The Radiant Spirit
+  if ((typeof name === 'string' && name.indexOf("The Radiant Spirit") !== -1) || (typeof name === 'number' && name >= 61 && name <= 65)) {
+    const title = "61–65 | 🌈 The Radiant Spirit";
+    const coreHtml = `
+      <div>
+        <h4>1. Wall Color / Paint / Wallpaper</h4>
+        <div class="desc">Shades: Sunshine Yellow, Bright Coral, Sky Blue, Soft Lavender, Cream.</div>
+        <h4>2. Flooring</h4>
+        <div class="desc">Light hardwood or warm carpets with bright area rugs to define joyful zones.</div>
+        <h4>3. Ceiling Design</h4>
+        <div class="desc">Flat or gentle coves with playful hanging elements and bright ambient lighting.</div>
+        <h4>4. Lighting</h4>
+        <div class="desc">Adjustable warm LED strips, playful pendant lights, and layered table lamps.</div>
+        <h4>5. Windows & Curtains/Blinds</h4>
+        <div class="desc">Large windows with sheer layers to let in abundant light.</div>
+        <h4>6. Doors</h4>
+        <div class="desc">Painted doors or warm neutrals that reflect personality.</div>
+        <h4>7. Furniture Layout</h4>
+        <div class="desc">Flexible, multi-functional furniture to support gathering and play.</div>
+        <h4>8. Bed / Sofa Style</h4>
+        <div class="desc">Comfortable bed/sofa with vibrant throws and layered cushions.</div>
+        <h4>9. Storage Units</h4>
+        <div class="desc">Open shelving for joyful displays and closed storage for clutter control.</div>
+        <h4>10. Décor & Art</h4>
+        <div class="desc">Playful art, gratitude boards, and colorful abstracts to encourage joy.</div>
+        <h4>11. Plants / Greenery</h4>
+        <div class="desc">Bright flowering plants or leafy greens for vitality.</div>
+        <h4>12. Technology</h4>
+        <div class="desc">Music systems, smart lighting, and interactive devices for creative engagement.</div>
+        <h4>13. Mirrors</h4>
+        <div class="desc">Medium to large mirrors with fun frames to amplify light and energy.</div>
+        <h4>14. Carpets & Rugs</h4>
+        <div class="desc">Layered, colorful rugs with playful patterns.</div>
+        <h4>15. Personal Touches</h4>
+        <div class="desc">Photo collages, journals, joy boxes, and playful collectibles.</div>
+      </div>
+    `;
+    const helpHtml = `<div><p class="desc">Brief: A bright, playful space that radiates gratitude and sustainable positivity.</p></div>`;
+    document.getElementById('roomContentArea').innerHTML = roomCardHTML(title, coreHtml, helpHtml) + `<div class="roomCard" style="margin-top:16px;"><h3>Brief</h3><p>Vibrant, joyful, and emotionally renewing.</p></div>`;
+    return;
+  }
+
+  // 66–70 | 🦁 The Brave Heart
+  if ((typeof name === 'string' && name.indexOf("The Brave Heart") !== -1) || (typeof name === 'number' && name >= 66 && name <= 70)) {
+    const title = "66–70 | 🦁 The Brave Heart";
+    const coreHtml = `
+      <div>
+        <h4>1. Wall Color / Paint / Wallpaper</h4>
+        <div class="desc">Shades: Lion Gold, Deep Red, Charcoal Gray, Warm Taupe, Teal Blue.</div>
+        <h4>2. Flooring</h4>
+        <div class="desc">Hardwood or natural stone with warm rugs that signify permanence and strength.</div>
+        <h4>3. Ceiling Design</h4>
+        <div class="desc">Flat ceilings with warm, directional lighting to support focus.</div>
+        <h4>4. Lighting</h4>
+        <div class="desc">Adjustable warm LEDs, desk lamps, and wall sconces for layered functionality.</div>
+        <h4>5. Windows & Curtains/Blinds</h4>
+        <div class="desc">Large windows with layered drapes in warm tones to support privacy and presence.</div>
+        <h4>6. Doors</h4>
+        <div class="desc">Solid wood doors in bold earthy shades to reinforce boundary and security.</div>
+        <h4>7. Furniture Layout</h4>
+        <div class="desc">Structured layout with dedicated zones for reflection, action, and rest.</div>
+        <h4>8. Bed / Sofa Style</h4>
+        <div class="desc">Firm supportive furniture with layered warm textiles.</div>
+        <h4>9. Storage Units</h4>
+        <div class="desc">Organized closed storage and some display shelves for achievements.</div>
+        <h4>10. Décor & Art</h4>
+        <div class="desc">Bold, inspiring art and symbols of strength or personal legacy.</div>
+        <h4>11. Plants / Greenery</h4>
+        <div class="desc">Sturdy plants like snake plants or fiddle leaf figs to reinforce resilience.</div>
+        <h4>12. Technology</h4>
+        <div class="desc">Task-focused tech and motivational media for focused preparation.</div>
+        <h4>13. Mirrors</h4>
+        <div class="desc">Medium-sized solid-framed mirrors for measured self-reflection.</div>
+        <h4>14. Carpets & Rugs</h4>
+        <div class="desc">Textured rugs in earthy tones with simple patterns to ground the space.</div>
+        <h4>15. Personal Touches</h4>
+        <div class="desc">Journals, awards, framed quotes, and mementos of courage to reinforce identity.</div>
+      </div>
+    `;
+    const helpHtml = `<div><p class="desc">Brief: A grounded, empowering sanctuary that reinforces bravery and steady presence.</p></div>`;
+    document.getElementById('roomContentArea').innerHTML = roomCardHTML(title, coreHtml, helpHtml) + `<div class="roomCard" style="margin-top:16px;"><h3>Brief</h3><p>Warm, earthy, and honorific of personal strength.</p></div>`;
+    return;
+  }
+
+  // 71–75 | 🔥 The Inner Flame
+  if ((typeof name === 'string' && name.indexOf("The Inner Flame") !== -1) || (typeof name === 'number' && name >= 71 && name <= 75)) {
+    const title = "71–75 | 🔥 The Inner Flame";
+    const coreHtml = `
+      <div>
+        <h4>1. Wall Color / Paint / Wallpaper</h4>
+        <div class="desc">Shades: Fiery Red, Deep Magenta, Burnt Orange, Charcoal, Plum.</div>
+        <h4>2. Flooring</h4>
+        <div class="desc">Hard surfaces or bold rugs to define creative zones and movement paths.</div>
+        <h4>3. Ceiling Design</h4>
+        <div class="desc">Controlled ceilings with adjustable spotlights to encourage focus.</div>
+        <h4>4. Lighting</h4>
+        <div class="desc">Adjustable LED task lights, creative accent lighting and warm ambient sources.</div>
+        <h4>5. Windows & Curtains/Blinds</h4>
+        <div class="desc">Windows with strong blinds to control glare and protect rest cycles.</div>
+        <h4>6. Doors</h4>
+        <div class="desc">Sturdy doors that delineate creative privacy and focus.</div>
+        <h4>7. Furniture Layout</h4>
+        <div class="desc">Predictable, minimal layouts with clear walking paths to reduce cognitive load.</div>
+        <h4>8. Bed / Sofa Style</h4>
+        <div class="desc">Supportive bedding and seating to restore between intense sessions.</div>
+        <h4>9. Storage Units</h4>
+        <div class="desc">Organized, labeled storage for tools and materials to keep intensity channelled.</div>
+        <h4>10. Décor & Art</h4>
+        <div class="desc">Calming nature scenes or focused abstract pieces to reduce rumination and surface emotion safely.</div>
+        <h4>11. Plants / Greenery</h4>
+        <div class="desc">Small to medium plants to provide biophilic grounding.</div>
+        <h4>12. Technology</h4>
+        <div class="desc">Creative devices and smart lights for focus; keep non-essential tech out of sight.</div>
+        <h4>13. Mirrors</h4>
+        <div class="desc">Medium mirrors to support self-awareness without overexposure.</div>
+        <h4>14. Carpets & Rugs</h4>
+        <div class="desc">Durable rugs in warm tones to anchor high-energy areas.</div>
+        <h4>15. Personal Touches</h4>
+        <div class="desc">Journals, goal trackers, and motivational objects to direct passion toward purpose.</div>
+      </div>
+    `;
+    const helpHtml = `<div><p class="desc">Brief: A dynamic yet contained studio-like room that channels passion into sustainable practice.</p></div>`;
+    document.getElementById('roomContentArea').innerHTML = roomCardHTML(title, coreHtml, helpHtml) + `<div class="roomCard" style="margin-top:16px;"><h3>Brief</h3><p>Designed to hold intensity and convert it into focused creativity.</p></div>`;
+    return;
+  }
+
+  // 76–80 | 🕯️ The Guiding Light
+  if ((typeof name === 'string' && name.indexOf("The Guiding Light") !== -1) || (typeof name === 'number' && name >= 76 && name <= 80)) {
+    const title = "76–80 | 🕯️ The Guiding Light";
+    const coreHtml = `
+      <div>
+        <h4>1. Wall Color / Paint / Wallpaper</h4>
+        <div class="desc">Shades: Soft Ivory, Sage Green, Warm Taupe, Misty Blue, Charcoal Accent.</div>
+        <h4>2. Flooring</h4>
+        <div class="desc">Light hardwood, bamboo, or natural-fiber rugs for grounded warmth.</div>
+        <h4>3. Ceiling Design</h4>
+        <div class="desc">Flat or coffered ceilings with indirect ambient lighting for contemplative calm.</div>
+        <h4>4. Lighting</h4>
+        <div class="desc">Layered warm LEDs, desk lamps, and soft wall sconces for focused thinking.</div>
+        <h4>5. Windows & Curtains/Blinds</h4>
+        <div class="desc">Medium windows with balanced coverings to manage glare and support reflection.</div>
+        <h4>6. Doors</h4>
+        <div class="desc">Solid, simple doors to reduce distraction and protect contemplative space.</div>
+        <h4>7. Furniture Layout</h4>
+        <div class="desc">Minimal, ordered layout with clear task zones and seating for reflective practice.</div>
+        <h4>8. Bed / Sofa Style</h4>
+        <div class="desc">Comfortable but minimal bedding/seating to support clarity and rest.</div>
+        <h4>9. Storage Units</h4>
+        <div class="desc">Hidden storage, neat shelving for reference materials and tools.</div>
+        <h4>10. Décor & Art</h4>
+        <div class="desc">Minimal artwork, meaningful objects, and patterning that supports insight.</div>
+        <h4>11. Plants / Greenery</h4>
+        <div class="desc">Subtle plants to bring calm without cluttering attention.</div>
+        <h4>12. Technology</h4>
+        <div class="desc">Controlled tech for reference and study; keep distractions minimized.</div>
+        <h4>13. Mirrors</h4>
+        <div class="desc">Medium mirrors to expand light while avoiding detachment.</div>
+        <h4>14. Carpets & Rugs</h4>
+        <div class="desc">Natural-fiber rugs to provide tactile grounding and quiet focus.</div>
+        <h4>15. Personal Touches</h4>
+        <div class="desc">Books, notebooks, small meaningful artifacts that support contemplative practice.</div>
+      </div>
+    `;
+    const helpHtml = `<div><p class="desc">Brief: A calm, ordered retreat for sustained wisdom and clear thinking.</p></div>`;
+    document.getElementById('roomContentArea').innerHTML = roomCardHTML(title, coreHtml, helpHtml) + `<div class="roomCard" style="margin-top:16px;"><h3>Brief</h3><p>Designed to support pattern recognition, reflection, and steady insight.</p></div>`;
+    return;
+  }
+
+  // 81–85 | 🌠 The Boundless Dreamer
+  if ((typeof name === 'string' && name.indexOf("The Boundless Dreamer") !== -1) || (typeof name === 'number' && name >= 81 && name <= 85)) {
+    const title = "81–85 | 🌠 The Boundless Dreamer";
+    const coreHtml = `
+      <div>
+        <h4>1. Wall Color / Paint / Wallpaper</h4>
+        <div class="desc">Shades: Electric Blue, Bright Purple, Light Teal, Pale Yellow, Soft Gray.</div>
+        <h4>2. Flooring</h4>
+        <div class="desc">Open, light floors with flexible rugs to allow movement and idea flow.</div>
+        <h4>3. Ceiling Design</h4>
+        <div class="desc">Vaulted or open ceilings with dynamic lighting and hanging mobiles for inspiration.</div>
+        <h4>4. Lighting</h4>
+        <div class="desc">Dynamic and adjustable lighting to match creative cycles and focus.</div>
+        <h4>5. Windows & Curtains/Blinds</h4>
+        <div class="desc">Large windows for expansive views and inspiration; layered coverings for control.</div>
+        <h4>6. Doors</h4>
+        <div class="desc">Light doors that open to flexible spaces for collaboration and solitude.</div>
+        <h4>7. Furniture Layout</h4>
+        <div class="desc">Modular, flexible arrangements that support collaboration and big thinking.</div>
+        <h4>8. Bed / Sofa Style</h4>
+        <div class="desc">Comfortable lounging areas for daydreaming and idea incubation.</div>
+        <h4>9. Storage Units</h4>
+        <div class="desc">Open shelving for objects that inspire; closed storage for focus tools.</div>
+        <h4>10. Décor & Art</h4>
+        <div class="desc">Bold imaginative art, idea maps, and colorful installations.</div>
+        <h4>11. Plants / Greenery</h4>
+        <div class="desc">Airy plants and statement greenery to energize imagination.</div>
+        <h4>12. Technology</h4>
+        <div class="desc">Interactive tech, creative tools, and idea-capture devices for flow.</div>
+        <h4>13. Mirrors</h4>
+        <div class="desc">Large mirrors to expand perceived space and reflect creative energy.</div>
+        <h4>14. Carpets & Rugs</h4>
+        <div class="desc">Mix of patterned and neutral rugs to define concept zones.</div>
+        <h4>15. Personal Touches</h4>
+        <div class="desc">Vision boards, prototypes, and items that spark multi-dimensional thinking.</div>
+      </div>
+    `;
+    const helpHtml = `<div><p class="desc">Brief: A big-sky, flexible lab for visionary thinking and playful scheming.</p></div>`;
+    document.getElementById('roomContentArea').innerHTML = roomCardHTML(title, coreHtml, helpHtml) + `<div class="roomCard" style="margin-top:16px;"><h3>Brief</h3><p>Supports expansive vision while retaining usable structure.</p></div>`;
+    return;
+  }
+
+  // 86–90 | 🎙️ The Brave Creator
+  if ((typeof name === 'string' && name.indexOf("The Brave Creator") !== -1) || (typeof name === 'number' && name >= 86 && name <= 90)) {
+    const title = "86–90 | 🎙️ The Brave Creator";
+    const coreHtml = `
+      <div>
+        <h4>1. Wall Color / Paint / Wallpaper</h4>
+        <div class="desc">Shades: Coral, Warm Red, Deep Teal, Charcoal, Pale Peach.</div>
+        <h4>2. Flooring</h4>
+        <div class="desc">Hardwood or functional flooring with defined creative zones.</div>
+        <h4>3. Ceiling Design</h4>
+        <div class="desc">Flat ceilings with lighting that supports performance and recording.</div>
+        <h4>4. Lighting</h4>
+        <div class="desc">Adjustable stage-like and ambient lights to support performance and vulnerability.</div>
+        <h4>5. Windows & Curtains/Blinds</h4>
+        <div class="desc">Windows with blackout options for controlled recording or intimate performances.</div>
+        <h4>6. Doors</h4>
+        <div class="desc">Solid doors to preserve privacy when creating and sharing work.</div>
+        <h4>7. Furniture Layout</h4>
+        <div class="desc">Flexible layout: workbench, stage area, cozy audience corner.</div>
+        <h4>8. Bed / Sofa Style</h4>
+        <div class="desc">Comfortable lounge areas for decompressing between creative bursts.</div>
+        <h4>9. Storage Units</h4>
+        <div class="desc">Open and closed storage for props, instruments, and creative materials.</div>
+        <h4>10. Décor & Art</h4>
+        <div class="desc">Brave, expressive art; examples of work and vulnerability displays.</div>
+        <h4>11. Plants / Greenery</h4>
+        <div class="desc">Small plants to add life without dominating creative space.</div>
+        <h4>12. Technology</h4>
+        <div class="desc">Recording gear, smart lighting, and creative tools to support sharing and craft.</div>
+        <h4>13. Mirrors</h4>
+        <div class="desc">Mirrors for practicing delivery and presence.</div>
+        <h4>14. Carpets & Rugs</h4>
+        <div class="desc">Rugs that define stages and listening corners.</div>
+        <h4>15. Personal Touches</h4>
+        <div class="desc">Props, diaries, performance mementos, and elements that remind of brave acts.</div>
+      </div>
+    `;
+    const helpHtml = `<div><p class="desc">Brief: A stage-ready, intimate workspace to practice authenticity and craft.</p></div>`;
+    document.getElementById('roomContentArea').innerHTML = roomCardHTML(title, coreHtml, helpHtml) + `<div class="roomCard" style="margin-top:16px;"><h3>Brief</h3><p>Holds courage + craft: allows practice and public-facing bravery.</p></div>`;
+    return;
+  }
+
+  // 91–95 | ❤️‍🔥 The Compassionate Flame
+  if ((typeof name === 'string' && name.indexOf("The Compassionate Flame") !== -1) || (typeof name === 'number' && name >= 91 && name <= 95)) {
+    const title = "91–95 | ❤️‍🔥 The Compassionate Flame";
+    const coreHtml = `
+      <div>
+        <h4>1. Wall Color / Paint / Wallpaper</h4>
+        <div class="desc">Shades: Rose Red, Coral, Soft Pink, Warm Peach, Pale Aqua.</div>
+        <h4>2. Flooring</h4>
+        <div class="desc">Warm hardwood with plush area rugs for comfort and approachability.</div>
+        <h4>3. Ceiling Design</h4>
+        <div class="desc">Soft curves and ambient lighting to encourage connection.</div>
+        <h4>4. Lighting</h4>
+        <div class="desc">Warm layered lights for inviting communal spaces.</div>
+        <h4>5. Windows & Curtains/Blinds</h4>
+        <div class="desc">Large windows for open connection with layered privacy options.</div>
+        <h4>6. Doors</h4>
+        <div class="desc">Inviting doors with warm finishes to welcome others in.</div>
+        <h4>7. Furniture Layout</h4>
+        <div class="desc">Seating arranged to foster intimate conversation and shared comfort.</div>
+        <h4>8. Bed / Sofa Style</h4>
+        <div class="desc">Comfort-first furniture with soft textiles suitable for hosting and solace.</div>
+        <h4>9. Storage Units</h4>
+        <div class="desc">Open display for shared objects; closed storage for private items.</div>
+        <h4>10. Décor & Art</h4>
+        <div class="desc">Heartful art, family photos, and objects that encourage giving and reciprocity.</div>
+        <h4>11. Plants / Greenery</h4>
+        <div class="desc">Lush plants that signal care and connection.</div>
+        <h4>12. Technology</h4>
+        <div class="desc">Shared tech (speakers, communal devices) that supports connection without overdrive.</div>
+        <h4>13. Mirrors</h4>
+        <div class="desc">Soft-framed mirrors to reflect warmth and relational presence.</div>
+        <h4>14. Carpets & Rugs</h4>
+        <div class="desc">Cozy rugs that invite gathering and touch.</div>
+        <h4>15. Personal Touches</h4>
+        <div class="desc">Shared journals, gifting boxes, meaningful items that nurture reciprocity.</div>
+      </div>
+    `;
+    const helpHtml = `<div><p class="desc">Brief: A generous, relational space that balances giving with small structures for self-care.</p></div>`;
+    document.getElementById('roomContentArea').innerHTML = roomCardHTML(title, coreHtml, helpHtml) + `<div class="roomCard" style="margin-top:16px;"><h3>Brief</h3><p>Warmly communal, with gentle boundaries to prevent over-giving.</p></div>`;
+    return;
+  }
+
+  // 96–100 | 🌟 The Luminous Soul
+  if ((typeof name === 'string' && name.indexOf("The Luminous Soul") !== -1) || (typeof name === 'number' && name >= 96 && name <= 100)) {
+    const title = "96–100 | 🌟 The Luminous Soul";
+    const coreHtml = `
+      <div>
+        <h4>1. Wall Color / Paint / Wallpaper</h4>
+        <div class="desc">Shades: Soft Gold, Cream, Pale Sky, Light Lavender, Soft Mint.</div>
+        <h4>2. Flooring</h4>
+        <div class="desc">Light, airy flooring with refined natural-fiber rugs that feel elevated yet approachable.</div>
+        <h4>3. Ceiling Design</h4>
+        <div class="desc">High or well-proportioned ceilings with soft indirect lighting to inspire calm presence.</div>
+        <h4>4. Lighting</h4>
+        <div class="desc">Layered warm lighting and subtle accent lights to support gentle radiance.</div>
+        <h4>5. Windows & Curtains/Blinds</h4>
+        <div class="desc">Large windows with flowing fabrics and adjustable privacy.</div>
+        <h4>6. Doors</h4>
+        <div class="desc">Light-toned doors with refined finishes to maintain openness.</div>
+        <h4>7. Furniture Layout</h4>
+        <div class="desc">Balanced, intentional arrangements that prioritize flow and communal calm.</div>
+        <h4>8. Bed / Sofa Style</h4>
+        <div class="desc">Elegant, comfortable furniture in muted tones that invite restful presence.</div>
+        <h4>9. Storage Units</h4>
+        <div class="desc">Discreet, beautiful storage solutions that maintain a tidy, luminous atmosphere.</div>
+        <h4>10. Décor & Art</h4>
+        <div class="desc">Subtle, refined art and objects that reflect inner wholeness.</div>
+        <h4>11. Plants / Greenery</h4>
+        <div class="desc">Soft, curated plants that bring life without clutter.</div>
+        <h4>12. Technology</h4>
+        <div class="desc">Minimal, high-quality tech integrated unobtrusively to support calm function.</div>
+        <h4>13. Mirrors</h4>
+        <div class="desc">Tasteful mirrors to expand light and reflect a sense of wholeness.</div>
+        <h4>14. Carpets & Rugs</h4>
+        <div class="desc">Natural-fiber rugs in soft palettes to support gentle grounding.</div>
+        <h4>15. Personal Touches</h4>
+        <div class="desc">Meaningful objects that reflect humility, presence, and inner peace.</div>
+      </div>
+    `;
+    const helpHtml = `<div><p class="desc">Brief: An elevated, peaceful room that mirrors inner wholeness and supports grounded presence.</p></div>`;
+    document.getElementById('roomContentArea').innerHTML = roomCardHTML(title, coreHtml, helpHtml) + `<div class="roomCard" style="margin-top:16px;"><h3>Brief</h3><p>Quietly luminous — supports presence, clarity, and gentle service.</p></div>`;
+    return;
+  }
+
+  // fallback
+  document.getElementById('roomContentArea').innerHTML = `<div style="text-align:center;color:#666;padding:18px;border-radius:8px;background:#fff;"><strong>No archetype found.</strong><div style="margin-top:8px">Take the quiz first or set localStorage keys.</div></div>`;
+}
+
+// Hook the ROOM ANALYSIS button to render the analysis (when user clicks ROOM ANALYSIS)
+document.getElementById('roomAnalysisBtn').onclick = () => {
+  document.getElementById('roomIntroPage').style.display = 'none';
+  document.getElementById('roomAnalysisPage').style.display = 'block';
+  showRoomAnalysis();
+  window.scrollTo(0,0);
+};
+
+// If user reloads on the roomAnalysisPage, try to render automatically
+document.addEventListener('DOMContentLoaded', function() {
+  if (document.getElementById('roomAnalysisPage').style.display === 'block') {
+    showRoomAnalysis();
+  }
+});
+
+
+</script>
+<script>
+/* ================= CSAP LOGIN + NAV SYSTEM (FINAL — BACK ONLY) ================= */
+
+const STORAGE_KEY = "CSAP_USERS";
+const USER_KEY = "CSAP_CURRENT_USER";
+const PAGE_KEY = "currentPage";
+
+/* ---------- Navigation History (BACK ONLY) ---------- */
+const pageHistory = [];
+
+/* ---------- Page Control + AUTH GUARD ---------- */
+function requireLogin() {
+  if (!localStorage.getItem(USER_KEY)) {
+    showPage('loginPage', true);
+    return false;
+  }
+  return true;
+}
+
+function showPage(pageId, fromBack = false) {
+  const protectedPages = [
+    'openingPage',
+    'quizPage',
+    'resultPage',
+    'introPage',
+    'colorPage',
+    'colorAnalysisPage',
+    'roomIntroPage',
+    'roomAnalysisPage'
+  ];
+
+  if (protectedPages.includes(pageId) && !requireLogin()) return;
+
+  document.querySelectorAll('.page').forEach(p => {
+    p.style.display = 'none';
+  });
+
+  const page = document.getElementById(pageId);
+  if (!page) return;
+
+  page.style.display = 'flex';
+  page.scrollTop = 0;
+
+  sessionStorage.setItem(PAGE_KEY, pageId);
+
+  if (!fromBack) {
+    pageHistory.push(pageId);
+  }
+
+  updateBackButton();
+
+  if (pageId === 'quizPage' && typeof showQuestion === 'function') {
+    showQuestion();
+  }
+}
+
+/* ---------- Back Button Logic ---------- */
+function goBack() {
+  if (pageHistory.length <= 1) return;
+  pageHistory.pop();
+  const previousPage = pageHistory[pageHistory.length - 1];
+  showPage(previousPage, true);
+}
+
+/* ---------- User Store ---------- */
+function getStore() {
+  return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {
+    totalUsers: 0,
+    users: {}
+  };
+}
+
+function saveStore(store) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(store));
+}
+
+/* ---------- Password Hash ---------- */
+async function hashPassword(password) {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(password);
+  const hash = await crypto.subtle.digest("SHA-256", data);
+  return Array.from(new Uint8Array(hash))
+    .map(b => b.toString(16).padStart(2, "0"))
+    .join("");
+}
+
+/* ---------- LOGIN (EXISTING USERS ONLY) ---------- */
+function initLogin() {
+  const btn = document.getElementById("loginBtn");
+  if (!btn) return;
+
+  btn.onclick = async () => {
+    const email = document.getElementById("loginEmail")?.value.trim();
+    const password = document.getElementById("loginPassword")?.value;
+
+    if (!email || !password) {
+      alert("Email and password required.");
+      return;
+    }
+
+    const store = getStore();
+    const hash = await hashPassword(password);
+
+    const user = Object.values(store.users)
+      .find(u => u.email === email);
+
+    if (!user || user.passwordHash !== hash) {
+      alert("Invalid credentials.");
+      return;
+    }
+
+    localStorage.setItem(USER_KEY, String(user.id));
+    showPage('openingPage');
+  };
+}
+window.addEventListener('DOMContentLoaded', () => {
+    showPage('loginPage'); // temporarily force it
+});
+
+document.getElementById("resetBtn").onclick = async () => {
+  const email = document.getElementById("forgotEmail").value.trim();
+
+  if (!email) {
+    alert("Please enter your email.");
+    return;
+  }
+
+  try {
+    await window.firebaseAuth.sendPasswordResetEmail(email);
+    alert("Password reset email sent. Check your inbox.");
+    showPage("loginPage");
+  } catch (error) {
+    alert(error.code + " — " + error.message);
+  }
+};
+
+
+function isValidPassword(password) {
+  return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
+    .test(password);
+}
+/* ---------- SIGNUP (NEW USERS ONLY) ---------- */
+function initSignup() {
+  const btn = document.getElementById("signupBtn");
+  if (!btn) return;
+
+  btn.onclick = async () => {
+    const name = document.getElementById("signupName")?.value.trim();
+    const email = document.getElementById("signupEmail")?.value.trim();
+    const password = document.getElementById("signupPassword")?.value;
+
+    if (!name || !email || !password) {
+      alert("All fields are required.");
+      return;
+    }
+
+    /* 🔒 PASSWORD RESTRICTIONS — MANDATORY */
+    if (!isValidPassword(password)) {
+      alert(
+        "Password must be at least 8 characters long and include:\n" +
+        "- 1 uppercase letter\n" +
+        "- 1 lowercase letter\n" +
+        "- 1 number\n" +
+        "- 1 special character"
+      );
+      return; // ⛔ STOP signup
+    }
+
+    const store = getStore();
+
+    /* ❌ BLOCK DUPLICATE ACCOUNTS */
+    if (Object.values(store.users).some(u => u.email === email)) {
+      alert("Account already exists. Please log in.");
+      showPage("loginPage");
+      return;
+    }
+
+    /* 🔐 HASH ONLY AFTER VALIDATION */
+    const hash = await hashPassword(password);
+
+    store.totalUsers++;
+    store.users[store.totalUsers] = {
+      id: store.totalUsers,
+      name,
+      email,
+      passwordHash: hash,
+      joinedAt: new Date().toISOString(),
+      sessions: 1
+    };
+
+    saveStore(store);
+
+    alert("Account created successfully. Please log in.");
+    showPage("loginPage"); // forced funnel
+  };
+}
+
+
+/* ---------- Back Button Visibility ---------- */
+function updateBackButton() {
+  const btn = document.getElementById('backBtn');
+  if (!btn) return;
+
+  const authPages = ['authPage', 'loginPage', 'signupPage'];
+  const currentPage = pageHistory[pageHistory.length - 1];
+
+  if (authPages.includes(currentPage)) {
+    btn.style.display = 'none';
+    return;
+  }
+
+  btn.style.display = pageHistory.length > 1 ? 'block' : 'none';
+}
+
+
+/* ---------- SINGLE APP ENTRY POINT ---------- */
+document.addEventListener('DOMContentLoaded', () => {
+  initLogin();
+  initSignup();
+
+  const user = localStorage.getItem(USER_KEY);
+  const savedPage = sessionStorage.getItem(PAGE_KEY);
+
+  const startPage = user
+    ? (savedPage && document.getElementById(savedPage) ? savedPage : 'openingPage')
+    : 'authPage';
+
+  pageHistory.length = 0;
+  pageHistory.push(startPage);
+
+  showPage(startPage, true);
+});
+
+window.firebaseFns.onAuthStateChanged(window.firebaseAuth, user => {
+  if (user) {
+    showPage("openingPage");
+  } else {
+    showPage("loginPage");
+  }
+});
+
+</script>
+
+<!-- BACK BUTTON -->
+<button id="backBtn" onclick="goBack()">⬅ Back</button>
+
+<style>
+#backBtn {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 12px 26px;
+  border-radius: 999px;
+  background: #111;
+  color: #fff;
+  border: none;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  z-index: 9999;
+  display: none;
+}
+</style>
+</body>
+</html>
+
+
+ 

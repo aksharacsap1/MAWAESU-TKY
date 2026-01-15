@@ -15,8 +15,7 @@ jobs:
         with:
           repoToken: "${{ secrets.GITHUB_TOKEN }}"
           firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT }}"
-          projectId: mawaesu-toknowyou
-
+          projectId: mawaesu-toknowyou      # exact Firebase Project ID
 
 
 
